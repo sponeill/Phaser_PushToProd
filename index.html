@@ -261,7 +261,7 @@
             endRoundTwo.visible = false;
 
             //End Round Three Text
-            endRoundThree = this.add.text(150, 75, ["Wasn't this project supposed to go live months ago?", "Bad news, a junior dev apparently", "resolved some merge conflicts with his eyes closed.", "Get in the soldier!"]);
+            endRoundThree = this.add.text(150, 75, ["Wasn't this project supposed to go live months ago?", "Bad news, a junior dev apparently", "resolved some merge conflicts with his eyes closed.", "Get in their soldier!"]);
             endRoundThree.setStyle({
                 fontSize: '16px',
                 fontFamily: 'Courier',
@@ -269,6 +269,17 @@
                 backgroundColor: 'black'
             });
             endRoundThree.visible = false;
+
+            
+            //End Round Four Text
+            endRoundFour = this.add.text(150, 75, ["Starting Round Five", "ToDo: This Text"]);
+            endRoundFour.setStyle({
+                fontSize: '16px',
+                fontFamily: 'Courier',
+                align: 'center',
+                backgroundColor: 'black'
+            });
+            endRoundFour.visible = false;
         }
 
         function update() {
@@ -337,6 +348,12 @@
 
                     case 3:
                         startRoundFour(player, bug);
+                        // greenSwitch.visible = true;
+                        // endRoundOne.visible = true;
+                        break;
+
+                    case 4:
+                        startRoundFive(player, bug);
                         // greenSwitch.visible = true;
                         // endRoundOne.visible = true;
                         break;
@@ -418,6 +435,32 @@
                 }, 10000);
             }
         }
+
+        function startRoundFive(player, bug) {
+            console.log('Start Round 5');
+            endRoundFour.visible = true;
+
+            beginNext();
+
+            function beginNext() {
+                setTimeout(function () {
+                    endRoundFour.visible = false;
+                    bugCount = 12;
+                    round = 5;
+                    roundText.setText('Round: ' + round);
+
+                    //TODO: New Enemy
+                    bugs.children.iterate(function (child) {
+                        child.enableBody(true, child.x, 0, true, true);
+                        child.setBounce(1);
+                        child.setCollideWorldBounds(true);
+                        child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                        child.setGravityY(0);
+                    });
+                }, 10000);
+            }
+        }
+
 
         function hitBomb(player, bomb) {
             console.log("Hit Bomb");
