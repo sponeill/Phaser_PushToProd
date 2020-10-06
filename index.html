@@ -92,7 +92,9 @@
       var launched = false;
       var facingRight = true;
       var countDown = 10;
+      var gameTimer = 0;
       var timedEvent;
+      var gameTimerEvent;
 
       var game = new Phaser.Game(config);
 
@@ -135,10 +137,18 @@
       function create() {
         this.add.image(400, 300, "background");
 
-        // Decrement the countDown every second
+        // Countdown Timer
         timedEvent = this.time.addEvent({
           delay: 1000,
           callback: decrementCountdown,
+          callbackScope: this,
+          loop: true,
+        });
+
+        // Game timer
+        timedEvent = this.time.addEvent({
+          delay: 1000,
+          callback: incrementGameTimer,
           callbackScope: this,
           loop: true,
         });
@@ -271,7 +281,7 @@
         });
 
         //Round
-        roundText = this.add.text(685, 16, "Round: 1", {
+        roundText = this.add.text(675, 16, "Round: 1", {
           fontSize: "20px",
           fill: "#FFFFFF",
         });
@@ -339,6 +349,15 @@
           align: "center",
         });
         intermissionTimerText.visible = false;
+
+        //Game Timer Text
+        gameTimerText = this.add.text(689, 42, ["Time: " + gameTimer]);
+        gameTimerText.setStyle({
+          fontSize: "20px",
+          fontFamily: "Courier",
+          align: "center",
+        });
+        gameTimerText.visible = true;
       }
 
       function update() {
@@ -537,6 +556,11 @@
         if (countDown <= 0) {
           intermissionTimerText.visible = false;
         }
+      }
+
+      function incrementGameTimer() {
+        gameTimer += 1; // One second
+        gameTimerText.setText("Time: " + gameTimer);
       }
 
       function hitBomb(player, bomb) {
