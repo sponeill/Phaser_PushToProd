@@ -85,12 +85,13 @@
       var bugCount = 12;
       var bugText;
       var endRoundOne;
-      var endRountTwo;
+      var endRoundTwo;
       var round = 1;
       var roundText;
       var cameras = this.cameras;
       var launched = false;
       var facingRight = true;
+      var countDown = 10;
 
       var game = new Phaser.Game(config);
 
@@ -320,6 +321,15 @@
           backgroundColor: "black",
         });
         endRoundFour.visible = false;
+
+        //Timer Text
+        intermissionTimerText = this.add.text(350, 16, ["10"]);
+        intermissionTimerText.setStyle({
+          fontSize: "48px",
+          fontFamily: "Courier",
+          align: "center",
+        });
+        intermissionTimerText.visible = false;
       }
 
       function update() {
@@ -406,12 +416,11 @@
         }
       }
 
-      function startRoundTwo(player, bug) {
+      function startRoundTwo() {
         console.log("Start Round 2");
         endRoundOne.visible = true;
 
-        //this.scene.physics.moveTo(rocket, 400, 202, 1);
-
+        //intermissionTimer();
         beginNext();
 
         function beginNext() {
@@ -499,6 +508,24 @@
             });
           }, 10000);
         }
+      }
+
+      // TODO: FIX
+      function intermissionTimer(player, bug) {
+        console.log("Intermission Timer Started");
+        intermissionTimerText.visible = true;
+
+        countDown();
+
+        function countDown() {
+          setTimeout(function () {
+            countDown -= 1;
+            intermissionTimerText.setText(countDown);
+          }, 1000);
+        }
+
+        // intermissionTimerText.visible = false;
+        countDown = 10;
       }
 
       function hitBomb(player, bomb) {
