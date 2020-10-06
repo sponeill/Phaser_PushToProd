@@ -95,6 +95,7 @@
       var gameTimer = 0;
       var timedEvent;
       var gameTimerEvent;
+      var roundComplete = false;
 
       var game = new Phaser.Game(config);
 
@@ -414,6 +415,7 @@
         if (bugs.countActive(true) === 0) {
           switch (round) {
             case 1:
+              roundComplete = true;
               startRoundTwo(player, bug);
               break;
 
@@ -471,6 +473,7 @@
         console.log("Start Round 3");
         endRoundTwo.visible = true;
 
+        intermissionTimer();
         beginNext();
 
         function beginNext() {
@@ -493,6 +496,7 @@
         console.log("Start Round 4");
         endRoundThree.visible = true;
 
+        intermissionTimer();
         beginNext();
 
         function beginNext() {
@@ -517,6 +521,7 @@
         console.log("Start Round 5");
         endRoundFour.visible = true;
 
+        intermissionTimer();
         beginNext();
 
         function beginNext() {
@@ -542,14 +547,13 @@
       function intermissionTimer(player, bug) {
         console.log("Intermission Timer Started");
         countDown = 11;
-        intermissionTimerText.visible = true;
       }
 
       function decrementCountdown() {
         countDown -= 1; // One second
         intermissionTimerText.setText(countDown);
 
-        if (countDown <= 10) {
+        if (countDown <= 10 && roundComplete) {
           intermissionTimerText.visible = true;
         }
 
