@@ -96,6 +96,8 @@
       var timedEvent;
       var gameTimerEvent;
       var roundComplete = false;
+      var hackers;
+      var platformBarriers;
 
       var game = new Phaser.Game(config);
 
@@ -109,6 +111,7 @@
         this.load.image("door", "assets/door.png");
         this.load.image("switch_red", "assets/switch_red.png");
         this.load.image("switch_green", "assets/switch_green.png");
+        this.load.image("barrier", "assets/platform_barrier.png");
         this.load.spritesheet("dude", "assets/predator.png", {
           frameWidth: 32,
           frameHeight: 48,
@@ -185,8 +188,15 @@
         platforms.create(850, 220, "ground");
         platforms.create(-50, 220, "ground");
 
+        //Barriers
+        platformBarriers = this.physics.add.staticGroup();
+        platformBarriers.create(630, 175, "barrier");
+        platformBarriers.create(170, 175, "barrier");
+        platformBarriers.create(320, 330, "barrier");
+        platformBarriers.create(480, 330, "barrier");
+
         //Player
-        player = this.physics.add.sprite(100, 510, "dude");
+        player = this.physics.add.sprite(100, 510, "jepack_dude");
 
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
@@ -244,6 +254,9 @@
           repeat: -1,
         });
 
+        //Hacker
+        hackers = this.physics.add.group();
+
         //Enable Keyboard Inputs
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -267,6 +280,8 @@
 
         //Adds the collision between the objects and the platforms
         this.physics.add.collider(player, platforms);
+        this.physics.add.collider(hackers, platforms);
+        this.physics.add.collider(hackers, platformBarriers);
         this.physics.add.collider(bugs, platforms);
         this.physics.add.collider(bombs, platforms);
         this.physics.add.collider(player, bombs, hitBomb, null, this);
@@ -343,13 +358,13 @@
         endRoundFour.visible = false;
 
         //Timer Text
-        intermissionTimerText = this.add.text(350, 16, [countDown]);
+        intermissionTimerText = this.add.text(375, 16, [countDown]);
         intermissionTimerText.setStyle({
           fontSize: "48px",
           fontFamily: "Courier",
           align: "center",
         });
-        intermissionTimerText.visible = false;
+        intermissionTimerText.visible = true;
 
         //Game Timer Text
         gameTimerText = this.add.text(689, 42, ["Time: " + gameTimer]);
@@ -446,11 +461,12 @@
         }
       }
 
-      function startRoundTwo() {
+      function startRoundTwo(player, bug) {
         console.log("Start Round 2");
-        endRoundOne.visible = true;
 
         intermissionTimer();
+        endRoundOne.visible = true;
+
         beginNext();
 
         function beginNext() {
@@ -460,11 +476,13 @@
             round = 2;
             roundText.setText("Round: " + round);
 
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-              child.setGravityY(0);
-            });
+            spawnHacker();
+
+            // bugs.children.iterate(function (child) {
+            //   child.enableBody(true, child.x, 0, true, true);
+            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+            //   child.setGravityY(0);
+            // });
           }, 10500);
         }
       }
@@ -483,11 +501,13 @@
             round = 3;
             roundText.setText("Round: " + round);
 
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-              child.setGravityY(0);
-            });
+            spawnHacker();
+
+            // bugs.children.iterate(function (child) {
+            //   child.enableBody(true, child.x, 0, true, true);
+            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+            //   child.setGravityY(0);
+            // });
           }, 10500);
         }
       }
@@ -543,7 +563,6 @@
         }
       }
 
-      // TODO: FIX VISIBILITY
       function intermissionTimer(player, bug) {
         console.log("Intermission Timer Started");
         countDown = 11;
@@ -567,6 +586,14 @@
         gameTimerText.setText("Time: " + gameTimer);
       }
 
+      function spawnHacker() {
+        var hacker = hackers.create(80, 150, "dude");
+        hacker.setBounce(0.2);
+        hacker.setCollideWorldBounds(true);
+        hacker.setVelocityX(80);
+        //hacker.setVelocity(Phaser.Math.Between(-200, 200), 20);
+      }
+
       function hitBomb(player, bomb) {
         console.log("Hit Bomb");
 
@@ -581,7 +608,7 @@
 
       function launchRocket(player, redSwitch) {
         console.log("Switch Hit. Bug Count: " + bugCount);
-        if (bugCount <= 0 && round === 3 && !launched) {
+        if (bugCount <= 0 && round === 5 && !launched) {
           this.cameras.main.shake(500);
           rocket.setVelocityY(-400);
           launched = true;
