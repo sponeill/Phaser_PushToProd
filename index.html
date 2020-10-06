@@ -92,6 +92,7 @@
       var launched = false;
       var facingRight = true;
       var countDown = 10;
+      var timedEvent;
 
       var game = new Phaser.Game(config);
 
@@ -133,6 +134,14 @@
 
       function create() {
         this.add.image(400, 300, "background");
+
+        // Decrement the countDown every second
+        timedEvent = this.time.addEvent({
+          delay: 1000,
+          callback: decrementCountdown,
+          callbackScope: this,
+          loop: true,
+        });
 
         //Rocket
         rocket = this.physics.add.sprite(400, 402, "rocket");
@@ -323,7 +332,7 @@
         endRoundFour.visible = false;
 
         //Timer Text
-        intermissionTimerText = this.add.text(350, 16, ["10"]);
+        intermissionTimerText = this.add.text(350, 16, [countDown]);
         intermissionTimerText.setStyle({
           fontSize: "48px",
           fontFamily: "Courier",
@@ -420,7 +429,7 @@
         console.log("Start Round 2");
         endRoundOne.visible = true;
 
-        //intermissionTimer();
+        intermissionTimer();
         beginNext();
 
         function beginNext() {
@@ -435,7 +444,7 @@
               child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
               child.setGravityY(0);
             });
-          }, 10000);
+          }, 10500);
         }
       }
 
@@ -457,7 +466,7 @@
               child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
               child.setGravityY(0);
             });
-          }, 10000);
+          }, 10500);
         }
       }
 
@@ -481,7 +490,7 @@
               child.setVelocity(Phaser.Math.Between(-200, 200), 20);
               child.setGravityY(0);
             });
-          }, 10000);
+          }, 10500);
         }
       }
 
@@ -506,26 +515,28 @@
               child.setVelocity(Phaser.Math.Between(-200, 200), 20);
               child.setGravityY(0);
             });
-          }, 10000);
+          }, 10500);
         }
       }
 
-      // TODO: FIX
+      // TODO: FIX VISIBILITY
       function intermissionTimer(player, bug) {
         console.log("Intermission Timer Started");
+        countDown = 11;
         intermissionTimerText.visible = true;
+      }
 
-        countDown();
+      function decrementCountdown() {
+        countDown -= 1; // One second
+        intermissionTimerText.setText(countDown);
 
-        function countDown() {
-          setTimeout(function () {
-            countDown -= 1;
-            intermissionTimerText.setText(countDown);
-          }, 1000);
+        if (countDown <= 10) {
+          intermissionTimerText.visible = true;
         }
 
-        // intermissionTimerText.visible = false;
-        countDown = 10;
+        if (countDown <= 0) {
+          intermissionTimerText.visible = false;
+        }
       }
 
       function hitBomb(player, bomb) {
