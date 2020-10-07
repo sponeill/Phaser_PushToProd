@@ -695,7 +695,9 @@
         var coordinates = [
           [80, 150],
           [640, 310],
+          [240, 310],
           [150, 510],
+          [700, 175],
         ];
 
         for (var i = 0; i < 3; i++) {
@@ -705,21 +707,17 @@
           var hacker = hackers.create(item[0], item[1], "dude");
           hacker.setBounce(0.2);
           hacker.setCollideWorldBounds(true);
-          hacker.setVelocityX(80);
-          hacker.anims.play("hacker_right", true);
+
+          var right = Math.random() >= 0.5;
+
+          if (right) {
+            hacker.setVelocityX(80);
+            hacker.anims.play("hacker_right", true);
+          } else {
+            hacker.setVelocityX(-80);
+            hacker.anims.play("hacker_left", true);
+          }
         }
-
-        // var hacker = hackers.create(80, 150, "dude");
-        // hacker.setBounce(0.2);
-        // hacker.setCollideWorldBounds(true);
-        // hacker.setVelocityX(80);
-        // hacker.anims.play("hacker_right", true);
-
-        // var hacker2 = hackers.create(640, 310, "dude");
-        // hacker2.setBounce(0.2);
-        // hacker2.setCollideWorldBounds(true);
-        // hacker2.setVelocityX(-90);
-        // hacker2.anims.play("hacker_left", true);
 
         dropPowerUp();
 
