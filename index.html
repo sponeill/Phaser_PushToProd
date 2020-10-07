@@ -153,6 +153,10 @@
           frameWidth: 32,
           frameHeight: 48,
         });
+        this.load.spritesheet("portal", "assets/portal.png", {
+          frameWidth: 50,
+          frameHeight: 60,
+        });
       }
 
       function create() {
@@ -307,6 +311,16 @@
           frames: this.anims.generateFrameNumbers("flame", {
             start: 0,
             end: 6,
+          }),
+          frameRate: 10,
+          repeat: -1,
+        });
+
+        this.anims.create({
+          key: "portal",
+          frames: this.anims.generateFrameNumbers("portal", {
+            start: 0,
+            end: 15,
           }),
           frameRate: 10,
           repeat: -1,
@@ -710,13 +724,17 @@
 
           var right = Math.random() >= 0.5;
 
-          if (right) {
-            hacker.setVelocityX(80);
-            hacker.anims.play("hacker_right", true);
-          } else {
-            hacker.setVelocityX(-80);
-            hacker.anims.play("hacker_left", true);
-          }
+          hacker.anims.play("portal", true);
+
+          setTimeout(function () {
+            if (right) {
+              hacker.setVelocityX(80);
+              hacker.anims.play("hacker_right", true);
+            } else {
+              hacker.setVelocityX(-80);
+              hacker.anims.play("hacker_left", true);
+            }
+          }, 1500);
         }
 
         dropPowerUp();
