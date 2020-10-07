@@ -191,7 +191,7 @@
       //Barriers
       platformBarriers = this.physics.add.staticGroup();
       platformBarriers.create(630, 175, "barrier", null, false, true);
-      platformBarriers.create(815, 175, "barrier", null, false, true); 
+      platformBarriers.create(815, 175, "barrier", null, false, true);
       platformBarriers.create(170, 175, "barrier", null, false, true);
       platformBarriers.create(-15, 175, "barrier", null, false, true);
       platformBarriers.create(320, 330, "barrier", null, false, true);
@@ -385,16 +385,16 @@
       endRoundFour.visible = false;
 
       //Timer Text
-      intermissionTimerText = this.add.text(375, 16, [countDown]);
+      intermissionTimerText = this.add.text(375, 175, [countDown]);
       intermissionTimerText.setStyle({
-        fontSize: "48px",
+        fontSize: "64px",
         fontFamily: "Courier",
         align: "center",
       });
       intermissionTimerText.visible = false;
 
       //Game Timer Text
-      gameTimerText = this.add.text(689, 42, ["Time: " + gameTimer]);
+      gameTimerText = this.add.text(375, 16, [formatTime(gameTimer)]);
       gameTimerText.setStyle({
         fontSize: "20px",
         fontFamily: "Courier",
@@ -446,7 +446,7 @@
       }
 
       //Hacker Movements
-      hackers.children.iterate(function(child) {
+      hackers.children.iterate(function (child) {
         if (child.body.touching.right) {
           console.log("hacker touch right");
           child.setVelocityX(-80);
@@ -625,7 +625,7 @@
 
     function incrementGameTimer() {
       gameTimer += 1; // One second
-      gameTimerText.setText("Time: " + gameTimer);
+      gameTimerText.setText(formatTime(gameTimer));
     }
 
     function spawnHacker() {
@@ -661,6 +661,17 @@
         rocket.setVelocityY(-400);
         launched = true;
       }
+    }
+
+    function formatTime(seconds) {
+      // Minutes
+      var minutes = Math.floor(seconds / 60);
+      // Seconds
+      var partInSeconds = seconds % 60;
+      // Adds left zeros to seconds
+      partInSeconds = partInSeconds.toString().padStart(2, '0');
+      // Returns formated time
+      return `${minutes}:${partInSeconds}`;
     }
   </script>
 </body>
