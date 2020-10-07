@@ -103,11 +103,17 @@
       var firewallPowerups;
       var firewallUp = false;
       var allowBombs = false;
+      var rocketCollider;
+      var preLaunchComplete = false;
 
       var game = new Phaser.Game(config);
 
       function preload() {
         this.load.image("background", "assets/matrix.png");
+        // this.load.image(
+        //   "background_conflict",
+        //   "assets/matrix_merge_conflict.png"
+        // );
         this.load.image("rocket", "assets/rocket_small.png");
         this.load.image("rocket_platform", "assets/rocket_platform.png");
         this.load.image("ground", "assets/platform.png");
@@ -162,6 +168,7 @@
 
       function create() {
         this.add.image(400, 300, "background");
+        //this.add.image(400, 300, "background_conflict");
 
         // Countdown Timer
         timedEvent = this.time.addEvent({
@@ -180,7 +187,7 @@
         });
 
         //Rocket
-        rocket = this.physics.add.sprite(400, 402, "rocket");
+        rocket = this.physics.add.sprite(400, 592, "rocket");
         rocket.setGravityY(-300);
 
         //Rocket Platform
@@ -222,6 +229,7 @@
         platformBarriers.create(815, 330, "barrier", null, false, true);
         platformBarriers.create(-15, 510, "barrier", null, false, true);
         platformBarriers.create(815, 510, "barrier", null, false, true);
+        platformBarriers.create(398, 260, "barrier", null, false, true);
 
         //Player
         player = this.physics.add.sprite(100, 510, "jepack_dude");
@@ -355,6 +363,13 @@
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(hackers, platforms);
         this.physics.add.collider(hackers, platformBarriers);
+        rocketCollider = this.physics.add.collider(
+          rocket,
+          platformBarriers,
+          rocketPreLaunch,
+          null,
+          this
+        );
         this.physics.add.collider(bugs, platforms);
         this.physics.add.collider(bombs, platforms);
         this.physics.add.collider(firewallPowerups, platforms);
@@ -384,9 +399,9 @@
         });
 
         //End Round One Text
-        endRoundOne = this.add.text(100, 75, [
+        endRoundOne = this.add.text(60, 75, [
           "You squashed all the bugs!",
-          "Unfortunately, the client's internal dev introduced some new ones.",
+          "Unfortunately, the client's internal dev team introduced some new ones.",
         ]);
         endRoundOne.setStyle({
           fontSize: "16px",
@@ -397,10 +412,12 @@
         endRoundOne.visible = false;
 
         //End Round Two Text
-        endRoundTwo = this.add.text(150, 75, [
-          "Don't stop now!",
-          "We recieved a final list of bugs from the client.",
-          "Take care of them ASAP!",
+        endRoundTwo = this.add.text(125, 75, [
+          "Who was in charge of site security?",
+          "It looks like we may have some intruders in the codebase",
+          "trying to drop some malicious code snippets.",
+          "Get the firewall configured and don't",
+          "touch any of that code they're are dropping in!",
         ]);
         endRoundTwo.setStyle({
           fontSize: "16px",
@@ -427,7 +444,7 @@
 
         //End Round Four Text
         endRoundFour = this.add.text(90, 75, [
-          "Supposedly this is the final FINAL list of issues from the client.",
+          "Supposedly, this is the final FINAL list of issues from the client.",
           "We'll see.",
         ]);
         endRoundFour.setStyle({
@@ -552,24 +569,25 @@
           switch (round) {
             case 1:
               roundComplete = true;
-              startRoundTwo(player, bug);
+              startBouncingBugsRound(player, bug);
               break;
 
             case 2:
-              startRoundThree(player, bug);
+              startHackerRound(player, bug);
               break;
 
-            case 3:
-              startRoundFour(player, bug);
-              break;
+            //This will never be hit because there are no bugs in the hacker round
+            // case 3:
+            //   startFlyingBugsRound(player, bug);
+            //   break;
 
             case 4:
-              startRoundFive(player, bug);
+              startFinalRound(player, bug);
               break;
 
             case 5:
+              rocket.setGravityY(-400);
               greenSwitch.visible = true;
-              endRoundOne.visible = true;
               break;
           }
 
@@ -582,7 +600,7 @@
         }
       }
 
-      function startRoundTwo(player, bug) {
+      function startBouncingBugsRound(player, bug) {
         console.log("Start Round 2");
 
         intermissionTimer();
@@ -597,18 +615,16 @@
             round = 2;
             roundText.setText("Round: " + round);
 
-            spawnHacker();
-
-            // bugs.children.iterate(function (child) {
-            //   child.enableBody(true, child.x, 0, true, true);
-            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-            //   child.setGravityY(0);
-            // });
+            bugs.children.iterate(function (child) {
+              child.enableBody(true, child.x, 0, true, true);
+              child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+              child.setGravityY(0);
+            });
           }, 10500);
         }
       }
 
-      function startRoundThree(player, bug) {
+      function startHackerRound(player, bug) {
         console.log("Start Round 3");
         endRoundTwo.visible = true;
 
@@ -618,24 +634,21 @@
         function beginNext() {
           setTimeout(function () {
             endRoundTwo.visible = false;
+            bugText.setText("Warning: Intruder Detected");
             bugCount = 12;
             round = 3;
             roundText.setText("Round: " + round);
 
             spawnHacker();
-
-            // bugs.children.iterate(function (child) {
-            //   child.enableBody(true, child.x, 0, true, true);
-            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-            //   child.setGravityY(0);
-            // });
           }, 10500);
         }
       }
 
-      function startRoundFour(player, bug) {
+      function startFlyingBugsRound(player, bug) {
         console.log("Start Round 4");
         endRoundThree.visible = true;
+
+        bugText.setText("Bugs: " + bugCount);
 
         intermissionTimer();
         beginNext();
@@ -658,7 +671,7 @@
         }
       }
 
-      function startRoundFive(player, bug) {
+      function startFinalRound(player, bug) {
         console.log("Start Round 5");
         endRoundFour.visible = true;
 
@@ -789,7 +802,8 @@
 
           setTimeout(function () {
             child.disableBody(true, true);
-          }, 1000);
+            startFlyingBugsRound();
+          }, 750);
         });
 
         bombs.children.iterate(function (child) {
@@ -798,17 +812,26 @@
 
           setTimeout(function () {
             child.disableBody(true, true);
-          }, 1000);
+          }, 750);
         });
       }
 
       function launchRocket(player, redSwitch) {
         console.log("Switch Hit. Bug Count: " + bugCount);
-        if (bugCount <= 0 && round === 5 && !launched) {
+        if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
           this.cameras.main.shake(500);
-          rocket.setVelocityY(-400);
+          rocket.setVelocityY(-600);
           launched = true;
         }
+      }
+
+      function rocketPreLaunch(rocket, platformBarriers) {
+        console.log("Pre-Launch started");
+        rocket.setGravityY(-300);
+
+        this.physics.world.removeCollider(rocketCollider);
+
+        preLaunchComplete = true;
       }
 
       function formatTime(seconds) {
