@@ -102,6 +102,7 @@
       var bombCount = 0;
       var firewallPowerups;
       var firewallUp = false;
+      var allowBombs = false;
 
       var game = new Phaser.Game(config);
 
@@ -526,6 +527,7 @@
           if (
             gameTimer - lastBombRelease > 5 &&
             bombCount <= 4 &&
+            allowBombs &&
             !firewallUp
           ) {
             var bomb = bombs.create(x, y, "bomb");
@@ -722,20 +724,30 @@
           hacker.setBounce(0.2);
           hacker.setCollideWorldBounds(true);
 
-          var right = Math.random() >= 0.5;
-
           hacker.anims.play("portal", true);
+        }
+
+        hackers.children.iterate(function (child) {
+          var right = Math.random() >= 0.5;
 
           setTimeout(function () {
             if (right) {
-              hacker.setVelocityX(80);
-              hacker.anims.play("hacker_right", true);
+              child.setVelocityX(80);
+              child.anims.play("hacker_right", true);
+
+              if (!allowBombs) {
+                allowBombs = true;
+              }
             } else {
-              hacker.setVelocityX(-80);
-              hacker.anims.play("hacker_left", true);
+              child.setVelocityX(-80);
+              child.anims.play("hacker_left", true);
+
+              if (!allowBombs) {
+                allowBombs = true;
+              }
             }
           }, 1500);
-        }
+        });
 
         dropPowerUp();
 
@@ -768,6 +780,7 @@
 
       function enableFirewall(player, star) {
         firewallUp = true;
+        allowBombs = false;
         star.disableBody(true, true);
 
         hackers.children.iterate(function (child) {
