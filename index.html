@@ -1,619 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Go Live!</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
 
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.min.js"
-      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-      crossorigin="anonymous"
-    ></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Go Live!</title>
+  <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
 
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
-    <style type="text/css">
-      body {
-        margin: 0;
-        background-color: greenyellow;
-      }
-    </style>
-  </head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
 
-  <body>
-    <!-- Page Layout -->
+  <style type="text/css">
+    body {
+      margin: 0;
+      background-color: greenyellow;
+    }
+  </style>
+</head>
 
-    <div class="row mt-3 mb-3">
-      <div class="col text-center">
-        <h1>Go Live!</h1>
-        <h5>
-          Squash all the bugs reported by your client in order to finally launch
-          their site! <br />
-          Be careful though, the client may have their developers introduce some
-          new bugs before you're through.
-          <br />
-          Watch out for the "Bad Test Data" power up that will help you clear
-          out some bugs quickly!
-        </h5>
-      </div>
+<body>
+  <!-- Page Layout -->
+
+  <div class="row mt-3 mb-3">
+    <div class="col text-center">
+      <h1>Go Live!</h1>
+      <h5>
+        Squash all the bugs reported by your client in order to finally launch
+        their site! <br />
+        Be careful though, the client may have their developers introduce some
+        new bugs before you're through.
+        <br />
+        Watch out for the "Bad Test Data" power up that will help you clear
+        out some bugs quickly!
+      </h5>
     </div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col">
-        <canvas></canvas>
-      </div>
-      <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <canvas></canvas>
     </div>
+    <div class="col"></div>
+  </div>
 
-    <!-- Game Script -->
-    <script type="text/javascript">
-      var config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        physics: {
-          default: "arcade",
-          arcade: {
-            gravity: { y: 300 },
-            debug: false,
-          },
+  <!-- Game Script -->
+  <script type="text/javascript">
+    var config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+        default: "arcade",
+        arcade: {
+          gravity: { y: 300 },
+          debug: false,
         },
-        scene: {
-          preload: preload,
-          create: create,
-          update: update,
-        },
-        canvas: document.querySelector("canvas"),
-      };
+      },
+      scene: {
+        preload: preload,
+        create: create,
+        update: update,
+      },
+      canvas: document.querySelector("canvas"),
+    };
 
-      var player;
-      var bugs;
-      var platforms;
-      var cursors;
-      var bombs;
-      var bugCount = 12;
-      var bugText;
-      var endRoundOne;
-      var endRoundTwo;
-      var round = 1;
-      var roundText;
-      var cameras = this.cameras;
-      var launched = false;
-      var facingRight = true;
-      var countDown = 10;
-      var gameTimer = 0;
-      var timedEvent;
-      var gameTimerEvent;
-      var roundComplete = false;
-      var hackers;
-      var platformBarriers;
+    var player;
+    var bugs;
+    var platforms;
+    var cursors;
+    var bombs;
+    var bugCount = 12;
+    var bugText;
+    var endRoundOne;
+    var endRoundTwo;
+    var round = 1;
+    var roundText;
+    var cameras = this.cameras;
+    var launched = false;
+    var facingRight = true;
+    var countDown = 10;
+    var gameTimer = 0;
+    var timedEvent;
+    var gameTimerEvent;
+    var roundComplete = false;
+    var hackers;
+    var platformBarriers;
 
-      var game = new Phaser.Game(config);
+    var game = new Phaser.Game(config);
 
-      function preload() {
-        this.load.image("background", "assets/matrix.png");
-        this.load.image("rocket", "assets/rocket_small.png");
-        this.load.image("rocket_platform", "assets/rocket_platform.png");
-        this.load.image("ground", "assets/platform.png");
-        this.load.image("bug", "assets/bug.png");
-        this.load.image("bomb", "assets/bomb.png");
-        this.load.image("door", "assets/door.png");
-        this.load.image("switch_red", "assets/switch_red.png");
-        this.load.image("switch_green", "assets/switch_green.png");
-        this.load.image("barrier", "assets/platform_barrier.png");
-        this.load.spritesheet("dude", "assets/predator.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-        this.load.spritesheet("jepack_dude", "assets/jetpack_dude.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-        this.load.spritesheet("jump_right", "assets/jump_right.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-        this.load.spritesheet("jump_left", "assets/jump_left.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-        this.load.spritesheet("turn_right", "assets/turn_right.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-        this.load.spritesheet("turn_left", "assets/turn_left.png", {
-          frameWidth: 32,
-          frameHeight: 48,
-        });
-      }
+    function preload() {
+      this.load.image("background", "assets/matrix.png");
+      this.load.image("rocket", "assets/rocket_small.png");
+      this.load.image("rocket_platform", "assets/rocket_platform.png");
+      this.load.image("ground", "assets/platform.png");
+      this.load.image("bug", "assets/bug.png");
+      this.load.image("bomb", "assets/bomb.png");
+      this.load.image("door", "assets/door.png");
+      this.load.image("switch_red", "assets/switch_red.png");
+      this.load.image("switch_green", "assets/switch_green.png");
+      this.load.image("barrier", "assets/platform_barrier.png");
+      this.load.spritesheet("dude", "assets/predator.png", {
+        frameWidth: 32,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("hacker_right", "assets/hacker_right.png", {
+        frameWidth: 35,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("hacker_left", "assets/hacker_left.png", {
+        frameWidth: 35,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("jepack_dude", "assets/jetpack_dude.png", {
+        frameWidth: 32,
+        frameHeight: 45,
+      });
+      this.load.spritesheet("jump_right", "assets/jump_right.png", {
+        frameWidth: 32,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("jump_left", "assets/jump_left.png", {
+        frameWidth: 32,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("turn_right", "assets/turn_right.png", {
+        frameWidth: 32,
+        frameHeight: 48,
+      });
+      this.load.spritesheet("turn_left", "assets/turn_left.png", {
+        frameWidth: 32,
+        frameHeight: 48,
+      });
+    }
 
-      function create() {
-        this.add.image(400, 300, "background");
+    function create() {
+      this.add.image(400, 300, "background");
 
-        // Countdown Timer
-        timedEvent = this.time.addEvent({
-          delay: 1000,
-          callback: decrementCountdown,
-          callbackScope: this,
-          loop: true,
-        });
+      // Countdown Timer
+      timedEvent = this.time.addEvent({
+        delay: 1000,
+        callback: decrementCountdown,
+        callbackScope: this,
+        loop: true,
+      });
 
-        // Game timer
-        timedEvent = this.time.addEvent({
-          delay: 1000,
-          callback: incrementGameTimer,
-          callbackScope: this,
-          loop: true,
-        });
+      // Game timer
+      timedEvent = this.time.addEvent({
+        delay: 1000,
+        callback: incrementGameTimer,
+        callbackScope: this,
+        loop: true,
+      });
 
-        //Rocket
-        rocket = this.physics.add.sprite(400, 402, "rocket");
-        rocket.setGravityY(-300);
+      //Rocket
+      rocket = this.physics.add.sprite(400, 402, "rocket");
+      rocket.setGravityY(-300);
 
-        //Rocket Platform
-        rocketPlatform = this.physics.add.staticGroup();
-        rocketPlatform.create(400, 505, "rocket_platform");
+      //Rocket Platform
+      rocketPlatform = this.physics.add.staticGroup();
+      rocketPlatform.create(400, 505, "rocket_platform");
 
-        //Door
-        door = this.physics.add.staticGroup();
-        door.create(100, 500, "door");
+      //Door
+      door = this.physics.add.staticGroup();
+      door.create(100, 500, "door");
 
-        //Red Switch
-        redSwitch = this.physics.add.staticGroup();
-        redSwitch.create(140, 520, "switch_red");
+      //Red Switch
+      redSwitch = this.physics.add.staticGroup();
+      redSwitch.create(140, 520, "switch_red");
 
-        //Green Switch
-        greenSwitch = this.physics.add.sprite(140, 520, "switch_green");
-        greenSwitch.setGravityY(-300);
-        greenSwitch.visible = false;
+      //Green Switch
+      greenSwitch = this.physics.add.sprite(140, 520, "switch_green");
+      greenSwitch.setGravityY(-300);
+      greenSwitch.visible = false;
 
-        //Platforms
-        platforms = this.physics.add.staticGroup();
+      //Platforms
+      platforms = this.physics.add.staticGroup();
 
-        platforms.create(400, 568, "ground").setScale(2).refreshBody();
+      platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
-        platforms.create(700, 375, "ground");
-        platforms.create(100, 375, "ground");
-        platforms.create(850, 220, "ground");
-        platforms.create(-50, 220, "ground");
+      platforms.create(700, 375, "ground");
+      platforms.create(100, 375, "ground");
+      platforms.create(850, 220, "ground");
+      platforms.create(-50, 220, "ground");
 
-        //Barriers
-        platformBarriers = this.physics.add.staticGroup();
-        platformBarriers.create(630, 175, "barrier");
-        platformBarriers.create(170, 175, "barrier");
-        platformBarriers.create(320, 330, "barrier");
-        platformBarriers.create(480, 330, "barrier");
+      //Barriers
+      platformBarriers = this.physics.add.staticGroup();
+      platformBarriers.create(630, 175, "barrier", null, false, true);
+      platformBarriers.create(815, 175, "barrier", null, false, true); 
+      platformBarriers.create(170, 175, "barrier", null, false, true);
+      platformBarriers.create(-15, 175, "barrier", null, false, true);
+      platformBarriers.create(320, 330, "barrier", null, false, true);
+      platformBarriers.create(-15, 330, "barrier", null, false, true);
+      platformBarriers.create(480, 330, "barrier", null, false, true);
+      platformBarriers.create(815, 330, "barrier", null, false, true);
+      platformBarriers.create(-15, 510, "barrier", null, false, true);
+      platformBarriers.create(815, 510, "barrier", null, false, true);
 
-        //Player
-        player = this.physics.add.sprite(100, 510, "jepack_dude");
+      //Player
+      player = this.physics.add.sprite(100, 510, "jepack_dude");
 
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
+      player.setBounce(0.2);
+      player.setCollideWorldBounds(true);
 
-        //Player Animations
-        this.anims.create({
-          key: "left",
-          frames: this.anims.generateFrameNumbers("jepack_dude", {
-            start: 0,
-            end: 3,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
+      //Player Animations
+      this.anims.create({
+        key: "left",
+        frames: this.anims.generateFrameNumbers("jepack_dude", {
+          start: 0,
+          end: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        this.anims.create({
-          key: "turn_right",
-          frames: [{ key: "turn_right", frame: 0 }],
-          frameRate: 20,
-        });
+      this.anims.create({
+        key: "turn_right",
+        frames: [{ key: "turn_right", frame: 0 }],
+        frameRate: 20,
+      });
 
-        this.anims.create({
-          key: "turn_left",
-          frames: [{ key: "turn_left", frame: 0 }],
-          frameRate: 20,
-        });
+      this.anims.create({
+        key: "turn_left",
+        frames: [{ key: "turn_left", frame: 0 }],
+        frameRate: 20,
+      });
 
-        this.anims.create({
-          key: "right",
-          frames: this.anims.generateFrameNumbers("jepack_dude", {
-            start: 5,
-            end: 8,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
+      this.anims.create({
+        key: "right",
+        frames: this.anims.generateFrameNumbers("jepack_dude", {
+          start: 5,
+          end: 8,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        this.anims.create({
-          key: "jump_right",
-          frames: this.anims.generateFrameNumbers("jump_right", {
-            start: 0,
-            end: 0,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
+      this.anims.create({
+        key: "jump_right",
+        frames: this.anims.generateFrameNumbers("jump_right", {
+          start: 0,
+          end: 0,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        this.anims.create({
-          key: "jump_left",
-          frames: this.anims.generateFrameNumbers("jump_left", {
-            start: 0,
-            end: 0,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
+      this.anims.create({
+        key: "jump_left",
+        frames: this.anims.generateFrameNumbers("jump_left", {
+          start: 0,
+          end: 0,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        //Hacker
-        hackers = this.physics.add.group();
+      //Hacker
+      hackers = this.physics.add.group();
 
-        //Enable Keyboard Inputs
-        cursors = this.input.keyboard.createCursorKeys();
+      //TODO: Clean Up Hacker Animations
+      this.anims.create({
+        key: "hacker_left",
+        frames: this.anims.generateFrameNumbers("hacker_left", {
+          start: 0,
+          end: 9,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        //Bugs
-        bugs = this.physics.add.group({
-          key: "bug",
-          //Will create 12 bugs total, 1 original and 12 children
-          repeat: 11,
-          //Placement of generated bugs
-          setXY: { x: 12, y: 0, stepX: 70 },
-        });
+      this.anims.create({
+        key: "hacker_right",
+        frames: this.anims.generateFrameNumbers("hacker_right", {
+          start: 0,
+          end: 9,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
 
-        bugs.children.iterate(function (child) {
-          child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-          //Gravity can be overridden on a body from the value set in the config above
-          child.setGravityY(400);
-        });
+      //Enable Keyboard Inputs
+      cursors = this.input.keyboard.createCursorKeys();
 
-        //Bombs
-        bombs = this.physics.add.group();
+      //Bugs
+      bugs = this.physics.add.group({
+        key: "bug",
+        //Will create 12 bugs total, 1 original and 12 children
+        repeat: 11,
+        //Placement of generated bugs
+        setXY: { x: 12, y: 0, stepX: 70 },
+      });
 
-        //Adds the collision between the objects and the platforms
-        this.physics.add.collider(player, platforms);
-        this.physics.add.collider(hackers, platforms);
-        this.physics.add.collider(hackers, platformBarriers);
-        this.physics.add.collider(bugs, platforms);
-        this.physics.add.collider(bombs, platforms);
-        this.physics.add.collider(player, bombs, hitBomb, null, this);
+      bugs.children.iterate(function (child) {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        //Gravity can be overridden on a body from the value set in the config above
+        child.setGravityY(400);
+      });
 
-        //Overlaps Events
-        this.physics.add.overlap(player, bugs, squashBugs, null, this);
-        this.physics.add.overlap(player, redSwitch, launchRocket, null, this);
+      //Bombs
+      bombs = this.physics.add.group();
 
-        //Bug Count
-        bugText = this.add.text(16, 16, "Bugs: 12", {
-          fontSize: "20px",
-          fill: "#FFFFFF",
-        });
+      //Adds the collision between the objects and the platforms
+      this.physics.add.collider(player, platforms);
+      this.physics.add.collider(hackers, platforms);
+      this.physics.add.collider(hackers, platformBarriers);
+      this.physics.add.collider(bugs, platforms);
+      this.physics.add.collider(bombs, platforms);
+      this.physics.add.collider(player, bombs, hitBomb, null, this);
 
-        //Round
-        roundText = this.add.text(675, 16, "Round: 1", {
-          fontSize: "20px",
-          fill: "#FFFFFF",
-        });
+      //Overlaps Events
+      this.physics.add.overlap(player, bugs, squashBugs, null, this);
+      this.physics.add.overlap(player, redSwitch, launchRocket, null, this);
 
-        //End Round One Text
-        endRoundOne = this.add.text(100, 75, [
-          "You squashed all the bugs!",
-          "Unfortunately, the client's internal dev introduced some new ones.",
-        ]);
-        endRoundOne.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundOne.visible = false;
+      //Bug Count
+      bugText = this.add.text(16, 16, "Bugs: 12", {
+        fontSize: "20px",
+        fill: "#FFFFFF",
+      });
 
-        //End Round Two Text
-        endRoundTwo = this.add.text(150, 75, [
-          "Don't stop now!",
-          "We recieved a final list of bugs from the client.",
-          "Take care of them ASAP!",
-        ]);
-        endRoundTwo.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundTwo.visible = false;
+      //Round
+      roundText = this.add.text(675, 16, "Round: 1", {
+        fontSize: "20px",
+        fill: "#FFFFFF",
+      });
 
-        //End Round Three Text
-        endRoundThree = this.add.text(150, 75, [
-          "Wasn't this project supposed to go live months ago?",
-          "Bad news, a junior dev apparently",
-          "resolved some merge conflicts with his eyes closed.",
-          "Get in their soldier!",
-        ]);
-        endRoundThree.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundThree.visible = false;
+      //End Round One Text
+      endRoundOne = this.add.text(100, 75, [
+        "You squashed all the bugs!",
+        "Unfortunately, the client's internal dev introduced some new ones.",
+      ]);
+      endRoundOne.setStyle({
+        fontSize: "16px",
+        fontFamily: "Courier",
+        align: "center",
+        backgroundColor: "black",
+      });
+      endRoundOne.visible = false;
 
-        //End Round Four Text
-        endRoundFour = this.add.text(150, 75, [
-          "Starting Round Five",
-          "ToDo: This Text",
-        ]);
-        endRoundFour.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundFour.visible = false;
+      //End Round Two Text
+      endRoundTwo = this.add.text(150, 75, [
+        "Don't stop now!",
+        "We recieved a final list of bugs from the client.",
+        "Take care of them ASAP!",
+      ]);
+      endRoundTwo.setStyle({
+        fontSize: "16px",
+        fontFamily: "Courier",
+        align: "center",
+        backgroundColor: "black",
+      });
+      endRoundTwo.visible = false;
 
-        //Timer Text
-        intermissionTimerText = this.add.text(375, 16, [countDown]);
-        intermissionTimerText.setStyle({
-          fontSize: "48px",
-          fontFamily: "Courier",
-          align: "center",
-        });
-        intermissionTimerText.visible = true;
+      //End Round Three Text
+      endRoundThree = this.add.text(150, 75, [
+        "Wasn't this project supposed to go live months ago?",
+        "Bad news, a junior dev apparently",
+        "resolved some merge conflicts with his eyes closed.",
+        "Get in their soldier!",
+      ]);
+      endRoundThree.setStyle({
+        fontSize: "16px",
+        fontFamily: "Courier",
+        align: "center",
+        backgroundColor: "black",
+      });
+      endRoundThree.visible = false;
 
-        //Game Timer Text
-        gameTimerText = this.add.text(689, 42, ["Time: " + gameTimer]);
-        gameTimerText.setStyle({
-          fontSize: "20px",
-          fontFamily: "Courier",
-          align: "center",
-        });
-        gameTimerText.visible = true;
-      }
+      //End Round Four Text
+      endRoundFour = this.add.text(150, 75, [
+        "Starting Round Five",
+        "ToDo: This Text",
+      ]);
+      endRoundFour.setStyle({
+        fontSize: "16px",
+        fontFamily: "Courier",
+        align: "center",
+        backgroundColor: "black",
+      });
+      endRoundFour.visible = false;
 
-      function update() {
-        if (cursors.left.isDown) {
-          facingRight = false;
-          player.setVelocityX(-160);
+      //Timer Text
+      intermissionTimerText = this.add.text(375, 16, [countDown]);
+      intermissionTimerText.setStyle({
+        fontSize: "48px",
+        fontFamily: "Courier",
+        align: "center",
+      });
+      intermissionTimerText.visible = false;
 
-          if (player.body.touching.down) {
-            player.anims.play("left", true);
-          } else {
-            player.anims.play("jump_left", true);
-          }
-        } else if (cursors.right.isDown) {
-          facingRight = true;
-          player.setVelocityX(160);
+      //Game Timer Text
+      gameTimerText = this.add.text(689, 42, ["Time: " + gameTimer]);
+      gameTimerText.setStyle({
+        fontSize: "20px",
+        fontFamily: "Courier",
+        align: "center",
+      });
+      gameTimerText.visible = true;
+    }
 
-          if (player.body.touching.down) {
-            player.anims.play("right", true);
-          } else {
-            player.anims.play("jump_right", true);
-          }
+    function update() {
+      if (cursors.left.isDown) {
+        facingRight = false;
+        player.setVelocityX(-160);
+
+        if (player.body.touching.down) {
+          player.anims.play("left", true);
         } else {
-          if (facingRight) {
-            player.anims.play("turn_right");
-          } else {
-            player.anims.play("turn_left");
-          }
-          player.setVelocityX(0);
+          player.anims.play("jump_left", true);
         }
+      } else if (cursors.right.isDown) {
+        facingRight = true;
+        player.setVelocityX(160);
 
-        //Jump
-        //Check to see if Up Key is depressed AND if player body is touching solid ground
-        if (cursors.up.isDown) {
-          if (facingRight) {
-            player.anims.play("jump_right", true);
-          } else {
-            player.anims.play("jump_left", true);
-          }
-
-          if (player.body.touching.down) {
-            player.setVelocityY(-330);
-          }
+        if (player.body.touching.down) {
+          player.anims.play("right", true);
+        } else {
+          player.anims.play("jump_right", true);
         }
+      } else {
+        if (facingRight) {
+          player.anims.play("turn_right");
+        } else {
+          player.anims.play("turn_left");
+        }
+        player.setVelocityX(0);
       }
 
-      function squashBugs(player, bug) {
-        console.log("Squashed Bug");
+      //Jump
+      //Check to see if Up Key is depressed AND if player body is touching solid ground
+      if (cursors.up.isDown) {
+        if (facingRight) {
+          player.anims.play("jump_right", true);
+        } else {
+          player.anims.play("jump_left", true);
+        }
 
-        bug.disableBody(true, true);
-
-        bugCount -= 1;
-        bugText.setText("Bugs: " + bugCount);
-
-        if (bugs.countActive(true) === 0) {
-          switch (round) {
-            case 1:
-              roundComplete = true;
-              startRoundTwo(player, bug);
-              break;
-
-            case 2:
-              startRoundThree(player, bug);
-              break;
-
-            case 3:
-              startRoundFour(player, bug);
-              break;
-
-            case 4:
-              startRoundFive(player, bug);
-              break;
-
-            case 5:
-              greenSwitch.visible = true;
-              endRoundOne.visible = true;
-              break;
-          }
-
-          // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-          // var bomb = bombs.create(x, 16, 'bomb');
-          // bomb.setBounce(1);
-          // bomb.setCollideWorldBounds(true);
-          // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        if (player.body.touching.down) {
+          player.setVelocityY(-330);
         }
       }
 
-      function startRoundTwo(player, bug) {
-        console.log("Start Round 2");
-
-        intermissionTimer();
-        endRoundOne.visible = true;
-
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundOne.visible = false;
-            bugCount = 12;
-            round = 2;
-            roundText.setText("Round: " + round);
-
-            spawnHacker();
-
-            // bugs.children.iterate(function (child) {
-            //   child.enableBody(true, child.x, 0, true, true);
-            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-            //   child.setGravityY(0);
-            // });
-          }, 10500);
-        }
-      }
-
-      function startRoundThree(player, bug) {
-        console.log("Start Round 3");
-        endRoundTwo.visible = true;
-
-        intermissionTimer();
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundTwo.visible = false;
-            bugCount = 12;
-            round = 3;
-            roundText.setText("Round: " + round);
-
-            spawnHacker();
-
-            // bugs.children.iterate(function (child) {
-            //   child.enableBody(true, child.x, 0, true, true);
-            //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-            //   child.setGravityY(0);
-            // });
-          }, 10500);
-        }
-      }
-
-      function startRoundFour(player, bug) {
-        console.log("Start Round 4");
-        endRoundThree.visible = true;
-
-        intermissionTimer();
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundThree.visible = false;
-            bugCount = 12;
-            round = 4;
-            roundText.setText("Round: " + round);
-
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounce(1);
-              child.setCollideWorldBounds(true);
-              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-              child.setGravityY(0);
-            });
-          }, 10500);
-        }
-      }
-
-      function startRoundFive(player, bug) {
-        console.log("Start Round 5");
-        endRoundFour.visible = true;
-
-        intermissionTimer();
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundFour.visible = false;
-            bugCount = 12;
-            round = 5;
-            roundText.setText("Round: " + round);
-
-            //TODO: New Enemy
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounce(1);
-              child.setCollideWorldBounds(true);
-              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-              child.setGravityY(0);
-            });
-          }, 10500);
-        }
-      }
-
-      function intermissionTimer(player, bug) {
-        console.log("Intermission Timer Started");
-        countDown = 11;
-      }
-
-      function decrementCountdown() {
-        countDown -= 1; // One second
-        intermissionTimerText.setText(countDown);
-
-        if (countDown <= 10 && roundComplete) {
-          intermissionTimerText.visible = true;
+      //Hacker Movements
+      hackers.children.iterate(function(child) {
+        if (child.body.touching.right) {
+          console.log("hacker touch right");
+          child.setVelocityX(-80);
+          child.anims.play("hacker_left", true);
         }
 
-        if (countDown <= 0) {
-          intermissionTimerText.visible = false;
+        if (child.body.touching.left) {
+          console.log("hacker touch left");
+          child.setVelocityX(80);
+          child.anims.play("hacker_right", true);
         }
-      }
+      })
+    }
 
-      function incrementGameTimer() {
-        gameTimer += 1; // One second
-        gameTimerText.setText("Time: " + gameTimer);
-      }
+    function squashBugs(player, bug) {
+      console.log("Squashed Bug");
 
-      function spawnHacker() {
-        var hacker = hackers.create(80, 150, "dude");
-        hacker.setBounce(0.2);
-        hacker.setCollideWorldBounds(true);
-        hacker.setVelocityX(80);
-        //hacker.setVelocity(Phaser.Math.Between(-200, 200), 20);
-      }
+      bug.disableBody(true, true);
 
-      function hitBomb(player, bomb) {
-        console.log("Hit Bomb");
+      bugCount -= 1;
+      bugText.setText("Bugs: " + bugCount);
 
-        this.physics.pause();
+      if (bugs.countActive(true) === 0) {
+        switch (round) {
+          case 1:
+            roundComplete = true;
+            startRoundTwo(player, bug);
+            break;
 
-        player.setTint(0xff0000);
+          case 2:
+            startRoundThree(player, bug);
+            break;
 
-        player.anims.play("turn");
+          case 3:
+            startRoundFour(player, bug);
+            break;
 
-        gameOver = true;
-      }
+          case 4:
+            startRoundFive(player, bug);
+            break;
 
-      function launchRocket(player, redSwitch) {
-        console.log("Switch Hit. Bug Count: " + bugCount);
-        if (bugCount <= 0 && round === 5 && !launched) {
-          this.cameras.main.shake(500);
-          rocket.setVelocityY(-400);
-          launched = true;
+          case 5:
+            greenSwitch.visible = true;
+            endRoundOne.visible = true;
+            break;
         }
+
+        // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+        // var bomb = bombs.create(x, 16, 'bomb');
+        // bomb.setBounce(1);
+        // bomb.setCollideWorldBounds(true);
+        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
       }
-    </script>
-  </body>
+    }
+
+    function startRoundTwo(player, bug) {
+      console.log("Start Round 2");
+
+      intermissionTimer();
+      endRoundOne.visible = true;
+
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundOne.visible = false;
+          bugCount = 12;
+          round = 2;
+          roundText.setText("Round: " + round);
+
+          spawnHacker();
+
+          // bugs.children.iterate(function (child) {
+          //   child.enableBody(true, child.x, 0, true, true);
+          //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+          //   child.setGravityY(0);
+          // });
+        }, 10500);
+      }
+    }
+
+    function startRoundThree(player, bug) {
+      console.log("Start Round 3");
+      endRoundTwo.visible = true;
+
+      intermissionTimer();
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundTwo.visible = false;
+          bugCount = 12;
+          round = 3;
+          roundText.setText("Round: " + round);
+
+          spawnHacker();
+
+          // bugs.children.iterate(function (child) {
+          //   child.enableBody(true, child.x, 0, true, true);
+          //   child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+          //   child.setGravityY(0);
+          // });
+        }, 10500);
+      }
+    }
+
+    function startRoundFour(player, bug) {
+      console.log("Start Round 4");
+      endRoundThree.visible = true;
+
+      intermissionTimer();
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundThree.visible = false;
+          bugCount = 12;
+          round = 4;
+          roundText.setText("Round: " + round);
+
+          bugs.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+            child.setBounce(1);
+            child.setCollideWorldBounds(true);
+            child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            child.setGravityY(0);
+          });
+        }, 10500);
+      }
+    }
+
+    function startRoundFive(player, bug) {
+      console.log("Start Round 5");
+      endRoundFour.visible = true;
+
+      intermissionTimer();
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundFour.visible = false;
+          bugCount = 12;
+          round = 5;
+          roundText.setText("Round: " + round);
+
+          //TODO: New Enemy
+          bugs.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+            child.setBounce(1);
+            child.setCollideWorldBounds(true);
+            child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            child.setGravityY(0);
+          });
+        }, 10500);
+      }
+    }
+
+    function intermissionTimer(player, bug) {
+      console.log("Intermission Timer Started");
+      countDown = 11;
+    }
+
+    function decrementCountdown() {
+      countDown -= 1; // One second
+      intermissionTimerText.setText(countDown);
+
+      if (countDown <= 3 && roundComplete) {
+        intermissionTimerText.visible = true;
+      }
+
+      if (countDown <= 0) {
+        intermissionTimerText.visible = false;
+      }
+    }
+
+    function incrementGameTimer() {
+      gameTimer += 1; // One second
+      gameTimerText.setText("Time: " + gameTimer);
+    }
+
+    function spawnHacker() {
+      var hacker = hackers.create(80, 150, "dude");
+      hacker.setBounce(0.2);
+      hacker.setCollideWorldBounds(true);
+      hacker.setVelocityX(80);
+      hacker.anims.play("hacker_right", true);
+
+      var hacker2 = hackers.create(640, 310, "dude");
+      hacker2.setBounce(0.2);
+      hacker2.setCollideWorldBounds(true);
+      hacker2.setVelocityX(-90);
+      hacker2.anims.play("hacker_left", true);
+    }
+
+    function hitBomb(player, bomb) {
+      console.log("Hit Bomb");
+
+      this.physics.pause();
+
+      player.setTint(0xff0000);
+
+      player.anims.play("turn");
+
+      gameOver = true;
+    }
+
+    function launchRocket(player, redSwitch) {
+      console.log("Switch Hit. Bug Count: " + bugCount);
+      if (bugCount <= 0 && round === 5 && !launched) {
+        this.cameras.main.shake(500);
+        rocket.setVelocityY(-400);
+        launched = true;
+      }
+    }
+  </script>
+</body>
+
 </html>
