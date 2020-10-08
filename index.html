@@ -874,13 +874,13 @@
         console.log("Switch Hit. Bug Count: " + bugCount);
         if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
           endRoundFive.visible = false;
-          countDown = 3;
+          countDown = 4;
 
           setTimeout(function () {
             //this.cameras.main.shake(500);
             rocket.setVelocityY(-600);
             launched = true;
-          }, 3000);
+          }, 4000);
         }
       }
 
