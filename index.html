@@ -1,73 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Push to Prod</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
 
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.min.js"
-      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-      crossorigin="anonymous"
-    ></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Push to Prod</title>
+  <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
 
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
-    <style type="text/css">
-      body {
-        margin: 0;
-        background-color: greenyellow;
-      }
-    </style>
-  </head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
 
-  <body>
-    <!-- Page Layout -->
+  <style type="text/css">
+    body {
+      margin: 0;
+      background-color: greenyellow;
+    }
+  </style>
+</head>
 
-    <div class="row mt-3 mb-3">
-      <div class="col text-center">
-        <h1>Push to Prod</h1>
-        <h5>
-          Squash all the bugs reported by your client in order to finally launch
-          their site! <br />
-          Be careful though, the client may have their developers introduce some
-          new bugs before you're through.
-          <br />
-          Watch out for the "Bad Test Data" power up that will help you clear
-          out some bugs quickly!
-        </h5>
-      </div>
+<body>
+  <!-- Page Layout -->
+
+  <div class="row mt-3 mb-3">
+    <div class="col text-center">
+      <h1>Push to Prod</h1>
+      <h5>
+        Squash all the bugs reported by your client in order to finally launch
+        their site! <br />
+        Be careful though, the client may have their developers introduce some
+        new bugs before you're through.
+        <br />
+        Watch out for the "Bad Test Data" power up that will help you clear
+        out some bugs quickly!
+      </h5>
     </div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col">
-        <canvas></canvas>
-      </div>
-      <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <canvas></canvas>
     </div>
+    <div class="col"></div>
+  </div>
 
-    <!-- Game Script -->
-    <script type="text/javascript">
-      var config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        physics: {
-          default: "arcade",
-          arcade: {
-            gravity: { y: 300 },
-            debug: false,
-          },
+  <!-- Game Script -->
+  <script type="text/javascript">
+    var config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+        default: "arcade",
+        arcade: {
+          gravity: { y: 300 },
+          debug: false,
         },
       },
       scene: {
@@ -340,7 +331,7 @@
         repeat: -1,
       });
 
-      
+
       this.anims.create({
         key: "bomb_sprite",
         frames: this.anims.generateFrameNumbers("bomb_sprite", {
@@ -520,369 +511,40 @@
         facingRight = true;
         player.setVelocityX(160);
 
-      function create() {
-        this.add.image(400, 300, "background");
-        //this.add.image(400, 300, "background_conflict");
-
-        // Countdown Timer
-        timedEvent = this.time.addEvent({
-          delay: 1000,
-          callback: decrementCountdown,
-          callbackScope: this,
-          loop: true,
-        });
-
-        // Game timer
-        timedEvent = this.time.addEvent({
-          delay: 1000,
-          callback: decrementGameTimer,
-          callbackScope: this,
-          loop: true,
-        });
-
-        //Rocket
-        rocket = this.physics.add.sprite(400, 592, "rocket");
-        rocket.setGravityY(-300);
-
-        //Rocket Platform
-        rocketPlatform = this.physics.add.staticGroup();
-        rocketPlatform.create(400, 505, "rocket_platform");
-
-        //Door
-        door = this.physics.add.staticGroup();
-        door.create(100, 500, "door");
-
-        //Red Switch
-        redSwitch = this.physics.add.staticGroup();
-        redSwitch.create(140, 520, "switch_red");
-
-        //Green Switch
-        greenSwitch = this.physics.add.sprite(140, 520, "switch_green");
-        greenSwitch.setGravityY(-300);
-        greenSwitch.visible = false;
-
-        //Platforms
-        platforms = this.physics.add.staticGroup();
-
-        platforms.create(400, 568, "ground").setScale(2).refreshBody();
-
-        platforms.create(700, 375, "ground");
-        platforms.create(100, 375, "ground");
-        platforms.create(850, 220, "ground");
-        platforms.create(-50, 220, "ground");
-
-        //Barriers
-        platformBarriers = this.physics.add.staticGroup();
-        platformBarriers.create(630, 175, "barrier", null, false, true);
-        platformBarriers.create(815, 175, "barrier", null, false, true);
-        platformBarriers.create(170, 175, "barrier", null, false, true);
-        platformBarriers.create(-15, 175, "barrier", null, false, true);
-        platformBarriers.create(320, 330, "barrier", null, false, true);
-        platformBarriers.create(-15, 330, "barrier", null, false, true);
-        platformBarriers.create(480, 330, "barrier", null, false, true);
-        platformBarriers.create(815, 330, "barrier", null, false, true);
-        platformBarriers.create(-15, 510, "barrier", null, false, true);
-        platformBarriers.create(815, 510, "barrier", null, false, true);
-        platformBarriers.create(398, 260, "barrier", null, false, true);
-
-        //Player
-        player = this.physics.add.sprite(100, 510, "jepack_dude");
-
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
-
-        //Player Animations
-        this.anims.create({
-          key: "left",
-          frames: this.anims.generateFrameNumbers("jepack_dude", {
-            start: 0,
-            end: 3,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "turn_right",
-          frames: [{ key: "turn_right", frame: 0 }],
-          frameRate: 20,
-        });
-
-        this.anims.create({
-          key: "turn_left",
-          frames: [{ key: "turn_left", frame: 0 }],
-          frameRate: 20,
-        });
-
-        this.anims.create({
-          key: "right",
-          frames: this.anims.generateFrameNumbers("jepack_dude", {
-            start: 5,
-            end: 8,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "jump_right",
-          frames: this.anims.generateFrameNumbers("jump_right", {
-            start: 0,
-            end: 0,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "jump_left",
-          frames: this.anims.generateFrameNumbers("jump_left", {
-            start: 0,
-            end: 0,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        //Hacker
-        hackers = this.physics.add.group();
-
-        //TODO: Clean Up Hacker Animations
-        this.anims.create({
-          key: "hacker_left",
-          frames: this.anims.generateFrameNumbers("hacker_left", {
-            start: 0,
-            end: 9,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "hacker_right",
-          frames: this.anims.generateFrameNumbers("hacker_right", {
-            start: 0,
-            end: 9,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        //Effects Animations
-        this.anims.create({
-          key: "flame",
-          frames: this.anims.generateFrameNumbers("flame", {
-            start: 0,
-            end: 6,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        this.anims.create({
-          key: "portal",
-          frames: this.anims.generateFrameNumbers("portal", {
-            start: 0,
-            end: 15,
-          }),
-          frameRate: 10,
-          repeat: -1,
-        });
-
-        //Enable Keyboard Inputs
-        cursors = this.input.keyboard.createCursorKeys();
-
-        //Bugs
-        bugs = this.physics.add.group({
-          key: "bug",
-          //Will create 12 bugs total, 1 original and 12 children
-          repeat: 11,
-          //Placement of generated bugs
-          setXY: { x: 12, y: 0, stepX: 70 },
-        });
-
-        bugs.children.iterate(function (child) {
-          child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-          //Gravity can be overridden on a body from the value set in the config above
-          child.setGravityY(400);
-        });
-
-        //Bombs
-        bombs = this.physics.add.group();
-
-        //FireWall PowerUp
-        firewallPowerups = this.physics.add.group();
-
-        //Adds the collision between the objects and the platforms
-        this.physics.add.collider(player, platforms);
-        this.physics.add.collider(hackers, platforms);
-        this.physics.add.collider(hackers, platformBarriers);
-        rocketCollider = this.physics.add.collider(
-          rocket,
-          platformBarriers,
-          rocketPreLaunch,
-          null,
-          this
-        );
-        this.physics.add.collider(bugs, platforms);
-        this.physics.add.collider(bombs, platforms);
-        this.physics.add.collider(firewallPowerups, platforms);
-        this.physics.add.collider(player, bombs, hitBomb, null, this);
-
-        //Overlaps Events
-        this.physics.add.overlap(player, bugs, squashBugs, null, this);
-        this.physics.add.overlap(player, redSwitch, launchRocket, null, this);
-        this.physics.add.overlap(
-          player,
-          firewallPowerups,
-          enableFirewall,
-          null,
-          this
-        );
-
-        //Bug Count
-        bugText = this.add.text(16, 16, "Bugs: 12", {
-          fontSize: "20px",
-          fill: "#FFFFFF",
-        });
-
-        //Round
-        roundText = this.add.text(675, 16, "Round: 1", {
-          fontSize: "20px",
-          fill: "#FFFFFF",
-        });
-
-        //End Round One Text
-        endRoundOne = this.add.text(60, 75, [
-          "You squashed all the bugs!",
-          "Unfortunately, the client's internal dev team introduced some new ones.",
-        ]);
-        endRoundOne.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundOne.visible = false;
-
-        //End Round Two Text
-        endRoundTwo = this.add.text(125, 75, [
-          "Who was in charge of site security?",
-          "It looks like we may have some intruders in the codebase",
-          "trying to drop some malicious code snippets.",
-          "Get the firewall configured and don't",
-          "touch any of that code they're are dropping in!",
-        ]);
-        endRoundTwo.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundTwo.visible = false;
-
-        //End Round Three Text
-        endRoundThree = this.add.text(150, 75, [
-          "Wasn't this project supposed to go live months ago?",
-          "Bad news, a junior dev apparently",
-          "resolved some merge conflicts with his eyes closed.",
-          "Get in there soldier!",
-        ]);
-        endRoundThree.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundThree.visible = false;
-
-        //End Round Four Text
-        endRoundFour = this.add.text(90, 75, [
-          "Supposedly, this is the final FINAL list of issues from the client.",
-          "We'll see.",
-        ]);
-        endRoundFour.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundFour.visible = false;
-
-        //End Round Five Text
-        endRoundFive = this.add.text(50, 75, [
-          "You've finally gotten through the list of bugs,",
-          "secured the site, and completed your ToDo's.",
-          "The site is finally ready to launch!",
-          "Hit the green switch to go live before the client asks for a new feature!",
-        ]);
-        endRoundFive.setStyle({
-          fontSize: "16px",
-          fontFamily: "Courier",
-          align: "center",
-          backgroundColor: "black",
-        });
-        endRoundFive.visible = false;
-
-        //Timer Text
-        intermissionTimerText = this.add.text(375, 175, [countDown]);
-        intermissionTimerText.setStyle({
-          fontSize: "64px",
-          fontFamily: "Courier",
-          align: "center",
-        });
-        intermissionTimerText.visible = false;
-
-        //Game Timer Text
-        gameTimerText = this.add.text(375, 16, [formatTime(gameTimer)]);
-        gameTimerText.setStyle({
-          fontSize: "20px",
-          fontFamily: "Courier",
-          align: "center",
-        });
-        gameTimerText.visible = true;
+        if (player.body.touching.down) {
+          player.anims.play("right", true);
+        } else {
+          player.anims.play("jump_right", true);
+        }
+      } else {
+        if (facingRight) {
+          player.anims.play("turn_right");
+        } else {
+          player.anims.play("turn_left");
+        }
+        player.setVelocityX(0);
       }
 
-      function update() {
-        if (cursors.left.isDown) {
-          facingRight = false;
-          player.setVelocityX(-160);
-
-          if (player.body.touching.down) {
-            player.anims.play("left", true);
-          } else {
-            player.anims.play("jump_left", true);
-          }
-        } else if (cursors.right.isDown) {
-          facingRight = true;
-          player.setVelocityX(160);
-
-          if (player.body.touching.down) {
-            player.anims.play("right", true);
-          } else {
-            player.anims.play("jump_right", true);
-          }
+      //Jump
+      //Check to see if Up Key is depressed AND if player body is touching solid ground
+      if (cursors.up.isDown) {
+        if (facingRight) {
+          player.anims.play("jump_right", true);
         } else {
-          if (facingRight) {
-            player.anims.play("turn_right");
-          } else {
-            player.anims.play("turn_left");
-          }
-          player.setVelocityX(0);
+          player.anims.play("jump_left", true);
         }
 
-        //Jump
-        //Check to see if Up Key is depressed AND if player body is touching solid ground
-        if (cursors.up.isDown) {
-          if (facingRight) {
-            player.anims.play("jump_right", true);
-          } else {
-            player.anims.play("jump_left", true);
-          }
+        if (player.body.touching.down) {
+          player.setVelocityY(-330);
+        }
+      }
 
-          if (player.body.touching.down) {
-            player.setVelocityY(-330);
-          }
+      //Hacker Movements
+      hackers.children.iterate(function (child) {
+        if (child.body.touching.right) {
+          console.log("hacker touch right");
+          child.setVelocityX(-80);
+          child.anims.play("hacker_left", true);
         }
 
         if (child.body.touching.left) {
@@ -917,225 +579,244 @@
           bombCount++;
         }
       }
+    }
 
-      function squashBugs(player, bug) {
-        console.log("Squashed Bug");
+    function squashBugs(player, bug) {
+      console.log("Squashed Bug");
 
-        bug.disableBody(true, true);
+      bug.disableBody(true, true);
 
-        bugCount -= 1;
-        bugText.setText("Bugs: " + bugCount);
+      bugCount -= 1;
+      bugText.setText("Bugs: " + bugCount);
 
-        if (bugs.countActive(true) === 0) {
-          switch (round) {
-            case 1:
-              roundComplete = true;
-              startBouncingBugsRound(player, bug);
-              break;
+      if (bugs.countActive(true) === 0) {
+        switch (round) {
+          case 1:
+            roundComplete = true;
+            startBouncingBugsRound(player, bug);
+            break;
 
-            case 2:
-              startHackerRound(player, bug);
-              break;
+          case 2:
+            startHackerRound(player, bug);
+            break;
 
-            //This will never be hit because there are no bugs in the hacker round
-            // case 3:
-            //   startFlyingBugsRound(player, bug);
-            //   break;
+          //This will never be hit because there are no bugs in the hacker round
+          // case 3:
+          //   startFlyingBugsRound(player, bug);
+          //   break;
 
-            case 4:
-              startFinalRound(player, bug);
-              break;
+          case 4:
+            startFinalRound(player, bug);
+            break;
 
-            case 5:
-              rocket.setGravityY(-400);
-              greenSwitch.visible = true;
-              endRoundFive.visible = true;
-              break;
-          }
-
-          // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-          // var bomb = bombs.create(x, 16, 'bomb');
-          // bomb.setBounce(1);
-          // bomb.setCollideWorldBounds(true);
-          // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        }
-      }
-
-      function startBouncingBugsRound(player, bug) {
-        console.log("Start Round 2");
-
-        intermissionTimer();
-
-        gameTimerText.visible = false;
-        bugText.visible = false;
-        roundText.visible = false;
-
-        endRoundOne.visible = true;
-
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundOne.visible = false;
-            bugCount = 12;
-            round = 2;
-            roundText.setText("Round: " + round);
-            gameTimerText.visible = true;
-            bugText.visible = true;
-            roundText.visible = true;
-
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-              child.setGravityY(0);
-            });
-          }, 10500);
-        }
-      }
-
-      function startHackerRound(player, bug) {
-        console.log("Start Round 3");
-
-        intermissionTimer();
-
-        gameTimerText.visible = false;
-        bugText.visible = false;
-        roundText.visible = false;
-
-        endRoundTwo.visible = true;
-
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundTwo.visible = false;
-            bugText.setText("Warning: Intruder Detected");
-            bugCount = 12;
-            round = 3;
-            roundText.setText("Round: " + round);
-
-            gameTimerText.visible = true;
-            roundText.visible = true;
-
-            spawnHacker();
-          }, 10500);
-        }
-      }
-
-      function startFlyingBugsRound(player, bug) {
-        console.log("Start Round 4");
-        bugText.setText("Bugs: " + bugCount);
-
-        intermissionTimer();
-
-        gameTimerText.visible = false;
-        bugText.visible = false;
-        roundText.visible = false;
-
-        endRoundThree.visible = true;
-
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundThree.visible = false;
-            bugCount = 12;
-            round = 4;
-            roundText.setText("Round: " + round);
-
-            gameTimerText.visible = true;
-            bugText.visible = true;
-            roundText.visible = true;
-
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounce(1);
-              child.setCollideWorldBounds(true);
-              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-              child.setGravityY(0);
-            });
-          }, 10500);
-        }
-      }
-
-      function startFinalRound(player, bug) {
-        console.log("Start Round 5");
-
-        intermissionTimer();
-
-        gameTimerText.visible = false;
-        bugText.visible = false;
-        roundText.visible = false;
-
-        endRoundFour.visible = true;
-
-        beginNext();
-
-        function beginNext() {
-          setTimeout(function () {
-            endRoundFour.visible = false;
-            bugCount = 12;
-            round = 5;
-            roundText.setText("Round: " + round);
-
-            gameTimerText.visible = true;
-            bugText.visible = true;
-            roundText.visible = true;
-
-            //TODO: New Enemy Patterns & Add Hackers
-            bugs.children.iterate(function (child) {
-              child.enableBody(true, child.x, 0, true, true);
-              child.setBounce(1);
-              child.setCollideWorldBounds(true);
-              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-              child.setGravityY(0);
-            });
-          }, 10500);
-        }
-      }
-
-      function intermissionTimer(player, bug) {
-        console.log("Intermission Timer Started");
-        countDown = 11;
-      }
-
-      function decrementCountdown() {
-        countDown -= 1; // One second
-        intermissionTimerText.setText(countDown);
-
-        if (countDown <= 3 && roundComplete) {
-          intermissionTimerText.visible = true;
+          case 5:
+            rocket.setGravityY(-400);
+            greenSwitch.visible = true;
+            endRoundFive.visible = true;
+            break;
         }
 
-        if (countDown <= 0) {
-          intermissionTimerText.visible = false;
-        }
+        // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+        // var bomb = bombs.create(x, 16, 'bomb');
+        // bomb.setBounce(1);
+        // bomb.setCollideWorldBounds(true);
+        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+      }
+    }
+
+    function startBouncingBugsRound(player, bug) {
+      console.log("Start Round 2");
+
+      intermissionTimer();
+
+      gameTimerText.visible = false;
+      bugText.visible = false;
+      roundText.visible = false;
+
+      endRoundOne.visible = true;
+
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundOne.visible = false;
+          bugCount = 12;
+          round = 2;
+          roundText.setText("Round: " + round);
+          gameTimerText.visible = true;
+          bugText.visible = true;
+          roundText.visible = true;
+
+          bugs.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+            child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+            child.setGravityY(0);
+          });
+        }, 10500);
+      }
+    }
+
+    function startHackerRound(player, bug) {
+      console.log("Start Round 3");
+
+      intermissionTimer();
+
+      gameTimerText.visible = false;
+      bugText.visible = false;
+      roundText.visible = false;
+
+      endRoundTwo.visible = true;
+
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundTwo.visible = false;
+          bugText.setText("Warning: Intruder Detected");
+          bugCount = 12;
+          round = 3;
+          roundText.setText("Round: " + round);
+
+          gameTimerText.visible = true;
+          roundText.visible = true;
+
+          spawnHacker();
+        }, 10500);
+      }
+    }
+
+    function startFlyingBugsRound(player, bug) {
+      console.log("Start Round 4");
+      bugText.setText("Bugs: " + bugCount);
+
+      intermissionTimer();
+
+      gameTimerText.visible = false;
+      bugText.visible = false;
+      roundText.visible = false;
+
+      endRoundThree.visible = true;
+
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundThree.visible = false;
+          bugCount = 12;
+          round = 4;
+          roundText.setText("Round: " + round);
+
+          gameTimerText.visible = true;
+          bugText.visible = true;
+          roundText.visible = true;
+
+          bugs.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+            child.setBounce(1);
+            child.setCollideWorldBounds(true);
+            child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            child.setGravityY(0);
+          });
+        }, 10500);
+      }
+    }
+
+    function startFinalRound(player, bug) {
+      console.log("Start Round 5");
+
+      intermissionTimer();
+
+      gameTimerText.visible = false;
+      bugText.visible = false;
+      roundText.visible = false;
+
+      endRoundFour.visible = true;
+
+      beginNext();
+
+      function beginNext() {
+        setTimeout(function () {
+          endRoundFour.visible = false;
+          bugCount = 12;
+          round = 5;
+          roundText.setText("Round: " + round);
+
+          gameTimerText.visible = true;
+          bugText.visible = true;
+          roundText.visible = true;
+
+          //TODO: New Enemy Patterns & Add Hackers
+          bugs.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+            child.setBounce(1);
+            child.setCollideWorldBounds(true);
+            child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            child.setGravityY(0);
+          });
+        }, 10500);
+      }
+    }
+
+    function intermissionTimer(player, bug) {
+      console.log("Intermission Timer Started");
+      countDown = 11;
+    }
+
+    function decrementCountdown() {
+      countDown -= 1; // One second
+      intermissionTimerText.setText(countDown);
+
+      if (countDown <= 3 && roundComplete) {
+        intermissionTimerText.visible = true;
       }
 
-      function decrementGameTimer() {
-        if (gameTimerText.visible === true) {
-          gameTimer -= 1; // One second
-          gameTimerText.setText(formatTime(gameTimer));
-        }
+      if (countDown <= 0) {
+        intermissionTimerText.visible = false;
+      }
+    }
+
+    function decrementGameTimer() {
+      if (gameTimerText.visible === true) {
+        gameTimer -= 1; // One second
+        gameTimerText.setText(formatTime(gameTimer));
+      }
+    }
+
+    function spawnHacker() {
+      var coordinates = [
+        [80, 150],
+        [640, 310],
+        [240, 310],
+        [150, 510],
+        [700, 175],
+      ];
+
+      for (var i = 0; i < 3; i++) {
+        var item = Phaser.Utils.Array.RemoveRandomElement(coordinates);
+        console.log(item);
+
+        var hacker = hackers.create(item[0], item[1], "dude");
+        hacker.setBounce(0.2);
+        hacker.setCollideWorldBounds(true);
+
+        hacker.anims.play("portal", true);
       }
 
-      function spawnHacker() {
-        var coordinates = [
-          [80, 150],
-          [640, 310],
-          [240, 310],
-          [150, 510],
-          [700, 175],
-        ];
+      hackers.children.iterate(function (child) {
+        var right = Math.random() >= 0.5;
 
-        for (var i = 0; i < 3; i++) {
-          var item = Phaser.Utils.Array.RemoveRandomElement(coordinates);
-          console.log(item);
+        setTimeout(function () {
+          if (right) {
+            child.setVelocityX(80);
+            child.anims.play("hacker_right", true);
 
-          var hacker = hackers.create(item[0], item[1], "dude");
-          hacker.setBounce(0.2);
-          hacker.setCollideWorldBounds(true);
+            if (!allowBombs) {
+              allowBombs = true;
+            }
+          } else {
+            child.setVelocityX(-80);
+            child.anims.play("hacker_left", true);
 
             if (!allowBombs) {
               allowBombs = true;
@@ -1161,107 +842,78 @@
       }
     }
 
-              if (!allowBombs) {
-                allowBombs = true;
-              }
-            } else {
-              child.setVelocityX(-80);
-              child.anims.play("hacker_left", true);
+    function hitBomb(player, bomb) {
+      console.log("Hit Bomb");
 
-              if (!allowBombs) {
-                allowBombs = true;
-              }
-            }
-          }, 1500);
-        });
+      this.physics.pause();
 
-        dropPowerUp();
+      player.setTint(0xff0000);
 
-        function dropPowerUp(x, y) {
-          setTimeout(function () {
-            var powerUp = firewallPowerups.create(
-              Phaser.Math.Between(0, 800),
-              0,
-              "firewallPowerup"
-            );
-            powerUp.setBounce(1);
-            powerUp.setGravityY(-200);
-            powerUp.setCollideWorldBounds(true);
-            powerUp.setVelocity(Phaser.Math.Between(-200, 200), 20);
-          }, 1500);
-        }
-      }
+      player.anims.play("turn");
 
-      function hitBomb(player, bomb) {
-        console.log("Hit Bomb");
+      gameOver = true;
+    }
 
-        this.physics.pause();
+    function enableFirewall(player, star) {
+      firewallUp = true;
+      allowBombs = false;
+      star.disableBody(true, true);
 
-        player.setTint(0xff0000);
+      hackers.children.iterate(function (child) {
+        child.setVelocityX(0);
+        child.anims.play("flame", true);
 
-        player.anims.play("turn");
+        setTimeout(function () {
+          child.disableBody(true, true);
+          startFlyingBugsRound();
+        }, 750);
+      });
 
-        gameOver = true;
-      }
+      bombs.children.iterate(function (child) {
+        child.setVelocityX(0);
+        child.anims.play("flame", true);
 
-      function enableFirewall(player, star) {
-        firewallUp = true;
-        allowBombs = false;
-        star.disableBody(true, true);
+        setTimeout(function () {
+          child.disableBody(true, true);
+        }, 750);
+      });
+    }
 
-        hackers.children.iterate(function (child) {
-          child.setVelocityX(0);
-          child.anims.play("flame", true);
-
-          setTimeout(function () {
-            child.disableBody(true, true);
-            startFlyingBugsRound();
-          }, 750);
-        });
-
-        bombs.children.iterate(function (child) {
-          child.setVelocityX(0);
-          child.anims.play("flame", true);
-
-          setTimeout(function () {
-            child.disableBody(true, true);
-          }, 750);
-        });
-      }
-
-      function launchRocket(player, redSwitch) {
-        console.log("Switch Hit. Bug Count: " + bugCount);
-        if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
-          endRoundFive.visible = false;
-          countDown = 4;
-
-          setTimeout(function () {
-            //this.cameras.main.shake(500);
-            rocket.setVelocityY(-600);
-            launched = true;
-          }, 4000);
-        }
-      }
-
-      function rocketPreLaunch(rocket, platformBarriers) {
-        console.log("Pre-Launch started");
-        rocket.setGravityY(-300);
-
-        this.physics.world.removeCollider(rocketCollider);
+    function launchRocket(player, redSwitch) {
+      console.log("Switch Hit. Bug Count: " + bugCount);
+      if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
 
         endRoundFive.visible = false;
         // countDown = 3;
 
-      function formatTime(seconds) {
-        // Minutes
-        var minutes = Math.floor(seconds / 60);
-        // Seconds
-        var partInSeconds = seconds % 60;
-        // Adds left zeros to seconds
-        partInSeconds = partInSeconds.toString().padStart(2, "0");
-        // Returns formated time
-        return `${minutes}:${partInSeconds}`;
+        setTimeout(function () {
+          //this.cameras.main.shake(500);
+          rocket.setVelocityY(-600);
+          launched = true;
+        }, 3000);
       }
-    </script>
-  </body>
+    }
+
+    function rocketPreLaunch(rocket, platformBarriers) {
+      console.log("Pre-Launch started");
+      rocket.setGravityY(-300);
+
+      this.physics.world.removeCollider(rocketCollider);
+
+      preLaunchComplete = true;
+    }
+
+    function formatTime(seconds) {
+      // Minutes
+      var minutes = Math.floor(seconds / 60);
+      // Seconds
+      var partInSeconds = seconds % 60;
+      // Adds left zeros to seconds
+      partInSeconds = partInSeconds.toString().padStart(2, "0");
+      // Returns formated time
+      return `${minutes}:${partInSeconds}`;
+    }
+  </script>
+</body>
+
 </html>
