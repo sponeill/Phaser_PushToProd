@@ -107,6 +107,7 @@
       //   "assets/matrix_merge_conflict.png"
       // );
       this.load.image("rocket", "assets/rocket_small.png");
+      this.load.image("platform_small", "assets/platform_small.png");
       this.load.image("rocket_platform", "assets/rocket_platform.png");
       this.load.image("ground", "assets/platform.png");
       this.load.image("bug", "assets/bug.png");
@@ -116,10 +117,10 @@
       this.load.image("switch_red", "assets/switch_red.png");
       this.load.image("switch_green", "assets/switch_green.png");
       this.load.image("barrier", "assets/platform_barrier.png");
-      this.load.spritesheet("dude", "assets/predator.png", {
-        frameWidth: 32,
-        frameHeight: 48,
-      });
+      // this.load.spritesheet("dude", "assets/predator.png", {
+      //   frameWidth: 32,
+      //   frameHeight: 48,
+      // });
       this.load.spritesheet("bomb_sprite", "assets/bomb_sprite.png", {
         frameWidth: 15,
         frameHeight: 15,
@@ -186,6 +187,10 @@
       rocket = this.physics.add.sprite(400, 592, "rocket");
       rocket.setGravityY(-300);
 
+      //Architect Platform
+      architectPlatform = this.physics.add.sprite(400, -25, "platform_small");
+      architectPlatform.setGravityY(-300);
+
       //Rocket Platform
       rocketPlatform = this.physics.add.staticGroup();
       rocketPlatform.create(400, 505, "rocket_platform");
@@ -226,7 +231,7 @@
       platformBarriers.create(-15, 510, "barrier", null, false, true);
       platformBarriers.create(815, 510, "barrier", null, false, true);
       platformBarriers.create(398, 260, "barrier", null, false, true);
-      platformBarriers.create(398, 140, "barrier", null, true, true);
+      platformBarriers.create(398, 140, "barrier", null, false, true);
 
       //Player
       player = this.physics.add.sprite(100, 510, "jepack_dude");
@@ -383,6 +388,10 @@
       this.physics.add.collider(firewallPowerups, platforms);
       this.physics.add.collider(player, hackers);
       this.physics.add.collider(player, bombs, hitBomb, null, this);
+      this.physics.add.collider(architectPlatform, platformBarriers);
+      this.physics.add.collider(architectPlatform, player);
+      //TODO: This caused strange behavior
+      //this.physics.add.collider(architectPlatform, bugs);
 
       //Overlaps Events
       this.physics.add.overlap(player, bugs, squashBugs, null, this);
@@ -594,6 +603,7 @@
         switch (round) {
           case 1:
             roundComplete = true;
+            revealArchitect();
             startBouncingBugsRound(player, bug);
             break;
 
@@ -902,6 +912,10 @@
       this.physics.world.removeCollider(rocketCollider);
 
       preLaunchComplete = true;
+    }
+
+    function revealArchitect() {
+       architectPlatform.setGravityY(-250);
     }
 
     function formatTime(seconds) {
