@@ -90,7 +90,7 @@
     var roundComplete = false;
     var hackers;
     var platformBarriers;
-    var lastBombRelease = 0;
+    var lastBombRelease = 180;
     var bombCount = 0;
     var firewallPowerups;
     var firewallUp = false;
@@ -110,15 +110,19 @@
       this.load.image("rocket_platform", "assets/rocket_platform.png");
       this.load.image("ground", "assets/platform.png");
       this.load.image("bug", "assets/bug.png");
-      this.load.image("bomb", "assets/bomb.png");
+      this.load.image("bomb", "assets/bomb_new.png");
       this.load.image("door", "assets/door.png");
-      this.load.image("firewallPowerup", "assets/star.png");
+      this.load.image("firewallPowerup", "assets/firewall.png");
       this.load.image("switch_red", "assets/switch_red.png");
       this.load.image("switch_green", "assets/switch_green.png");
       this.load.image("barrier", "assets/platform_barrier.png");
       this.load.spritesheet("dude", "assets/predator.png", {
         frameWidth: 32,
         frameHeight: 48,
+      });
+      this.load.spritesheet("bomb_sprite", "assets/bomb_sprite.png", {
+        frameWidth: 15,
+        frameHeight: 15,
       });
       this.load.spritesheet("hacker_right", "assets/hacker_right.png", {
         frameWidth: 35,
@@ -132,9 +136,9 @@
         frameWidth: 35,
         frameHeight: 48,
       });
-      this.load.spritesheet("jepack_dude", "assets/jetpack_dude.png", {
+      this.load.spritesheet("jepack_dude", "assets/jetpack_run_long.png", {
         frameWidth: 32,
-        frameHeight: 45,
+        frameHeight: 48,
       });
       this.load.spritesheet("jump_right", "assets/jump_right.png", {
         frameWidth: 32,
@@ -234,9 +238,9 @@
         key: "left",
         frames: this.anims.generateFrameNumbers("jepack_dude", {
           start: 0,
-          end: 3,
+          end: 14,
         }),
-        frameRate: 10,
+        frameRate: 25,
         repeat: -1,
       });
 
@@ -255,10 +259,10 @@
       this.anims.create({
         key: "right",
         frames: this.anims.generateFrameNumbers("jepack_dude", {
-          start: 5,
-          end: 8,
+          start: 16,
+          end: 31,
         }),
-        frameRate: 10,
+        frameRate: 25,
         repeat: -1,
       });
 
@@ -327,6 +331,17 @@
         repeat: -1,
       });
 
+      
+      this.anims.create({
+        key: "bomb_sprite",
+        frames: this.anims.generateFrameNumbers("bomb_sprite", {
+          start: 0,
+          end: 7,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+
       //Enable Keyboard Inputs
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -365,6 +380,7 @@
       this.physics.add.collider(bugs, platforms);
       this.physics.add.collider(bombs, platforms);
       this.physics.add.collider(firewallPowerups, platforms);
+      this.physics.add.collider(player, hackers);
       this.physics.add.collider(player, bombs, hitBomb, null, this);
 
       //Overlaps Events
@@ -549,12 +565,13 @@
         var y = hacker.y;
 
         if (
-          gameTimer - lastBombRelease > 5 &&
+          lastBombRelease - gameTimer > 5 &&
           bombCount <= 4 &&
           allowBombs &&
           !firewallUp
         ) {
           var bomb = bombs.create(x, y, "bomb");
+          //bomb.anims.play("bomb_sprite", true)
           bomb.setBounce(1);
           bomb.setCollideWorldBounds(true);
           bomb.setVelocity(Phaser.Math.Between(-200, 200), 80);
@@ -821,7 +838,7 @@
           powerUp.setGravityY(-200);
           powerUp.setCollideWorldBounds(true);
           powerUp.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        }, 1500);
+        }, 2000);
       }
     }
 
@@ -867,7 +884,7 @@
       if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
 
         endRoundFive.visible = false;
-        countDown = 3;
+        // countDown = 3;
 
         setTimeout(function () {
           //this.cameras.main.shake(500);
