@@ -93,11 +93,13 @@
     var lastBombRelease = 180;
     var bombCount = 0;
     var firewallPowerups;
+    var architectPowerups;
     var firewallUp = false;
     var allowBombs = false;
     var rocketCollider;
     var preLaunchComplete = false;
-    var hasArchitect = true;
+    var hasArchitect = false;
+    var numberOfArchitects = 0;
 
     var game = new Phaser.Game(config);
 
@@ -115,6 +117,7 @@
       this.load.image("bomb", "assets/bomb_new.png");
       this.load.image("door", "assets/door.png");
       this.load.image("firewallPowerup", "assets/firewall.png");
+      this.load.image("architectPowerup", "assets/architect_powerup.png");
       this.load.image("switch_red", "assets/switch_red.png");
       this.load.image("switch_green", "assets/switch_green.png");
       this.load.image("barrier", "assets/platform_barrier.png");
@@ -404,6 +407,14 @@
       //FireWall PowerUp
       firewallPowerups = this.physics.add.group();
 
+      //Architect Powerup
+      architectPowerups = this.physics.add.group();
+
+      //Available Powerup Symbols
+      architectIcon = this.physics.add.sprite(765, 570, "architectPowerup");
+      architectIcon.setGravityY(-300);
+      architectIcon.visible = false;
+
       //Adds the collision between the objects and the platforms
       this.physics.add.collider(player, platforms);
       this.physics.add.collider(hackers, platforms);
@@ -418,6 +429,7 @@
       this.physics.add.collider(bugs, platforms);
       this.physics.add.collider(bombs, platforms);
       this.physics.add.collider(firewallPowerups, platforms);
+      this.physics.add.collider(architectPowerups, platforms);
       this.physics.add.collider(player, hackers);
       this.physics.add.collider(player, bombs, hitBomb, null, this);
       this.physics.add.collider(architectPlatform, platformBarriers);
@@ -430,13 +442,8 @@
       //Overlaps Events
       this.physics.add.overlap(player, bugs, squashBugs, null, this);
       this.physics.add.overlap(player, redSwitch, launchRocket, null, this);
-      this.physics.add.overlap(
-        player,
-        firewallPowerups,
-        enableFirewall,
-        null,
-        this
-      );
+      this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
+      this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
 
       //Bug Count
       bugText = this.add.text(16, 16, "Bugs: 12", {
@@ -805,6 +812,13 @@
     function intermissionTimer(player, bug) {
       console.log("Intermission Timer Started");
       countDown = 11;
+
+      //Gives a 1 in 3 chance of getting an Architect Powerup
+      var dropArchitectPower = Math.random() >= 0.66;
+
+      if(!hasArchitect && dropArchitectPower && numberOfArchitects <= 1) {
+        dropArchitectPowerup();
+      }
     }
 
     function decrementCountdown() {
@@ -885,6 +899,23 @@
       }
     }
 
+    function dropArchitectPowerup() {
+
+      var powerUp = architectPowerups.create(
+            Phaser.Math.Between(0, 800),
+            0,
+            "architectPowerup"
+          );
+          powerUp.setBounce(1);
+          powerUp.setGravityY(-100);
+          powerUp.setCollideWorldBounds(true);
+          powerUp.setVelocity(Phaser.Math.Between(-300, 300), 20);
+
+      setTimeout(function () {
+        powerUp.disableBody(true, true);
+        }, 5500);
+    }
+
     function hitBomb(player, bomb) {
       console.log("Hit Bomb");
 
@@ -946,11 +977,19 @@
       preLaunchComplete = true;
     }
 
+    function addArchitectPowerup(player, architectPowerup ) {
+      hasArchitect = true;
+      architectPowerup.disableBody(true, true);
+      numberOfArchitects++;
+      architectIcon.visible = true;
+    }
+
     function revealArchitect() {
 
       if (hasArchitect) {
         architectPlatform.setGravityY(-250);
         architect.setGravityY(-250);
+        architectIcon.visible = false;
 
         setTimeout(function () {
           architect.anims.play("architect_action", true);
@@ -982,7 +1021,7 @@
       setTimeout(function () {
 
         bugs.children.iterate(function (child) {
-          var result = Math.random() >= 0.5;;
+          var result = Math.random() >= 0.4;
           if (result) {
             explodeBug(child);
           }
