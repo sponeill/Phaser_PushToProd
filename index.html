@@ -172,8 +172,12 @@
       this.add.image(400, 300, "background");
       //this.add.image(400, 300, "background_conflict");
 
-      //TODO: FIX THIS
-      //this.input.keyboard.on('keydown-A', this.revealArchitect, this);
+      //Architect Keypress
+      this.input.keyboard.on('keydown_A', function() {
+        if(hasArchitect) {
+          revealArchitect();
+        }
+      });
 
       // Countdown Timer
       timedEvent = this.time.addEvent({
