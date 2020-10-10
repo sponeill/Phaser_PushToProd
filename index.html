@@ -97,6 +97,7 @@
     var allowBombs = false;
     var rocketCollider;
     var preLaunchComplete = false;
+    var hasArchitect = true;
 
     var game = new Phaser.Game(config);
 
@@ -161,11 +162,18 @@
         frameWidth: 50,
         frameHeight: 60,
       });
+      this.load.spritesheet("architect", "assets/architect.png", {
+        frameWidth: 49,
+        frameHeight: 49,
+      });
     }
 
     function create() {
       this.add.image(400, 300, "background");
       //this.add.image(400, 300, "background_conflict");
+
+      //TODO: FIX THIS
+      //this.input.keyboard.on('keydown-A', this.revealArchitect, this);
 
       // Countdown Timer
       timedEvent = this.time.addEvent({
@@ -295,6 +303,10 @@
       //Hacker
       hackers = this.physics.add.group();
 
+      //Architect
+      architect = this.physics.add.sprite(400, -60, "architect");
+      architect.setGravityY(-300);
+
       //TODO: Clean Up Hacker Animations
       this.anims.create({
         key: "hacker_left",
@@ -313,6 +325,22 @@
           end: 9,
         }),
         frameRate: 10,
+        repeat: -1,
+      });
+
+      //Architect
+      this.anims.create({
+        key: "architect_idle",
+        frames: [{ key: "architect", frame: 0 }],
+        frameRate: 20,
+      });
+      this.anims.create({
+        key: "architect_action",
+        frames: this.anims.generateFrameNumbers("architect", {
+          start: 0,
+          end: 29,
+        }),
+        frameRate: 15,
         repeat: -1,
       });
 
@@ -389,6 +417,7 @@
       this.physics.add.collider(player, hackers);
       this.physics.add.collider(player, bombs, hitBomb, null, this);
       this.physics.add.collider(architectPlatform, platformBarriers);
+      this.physics.add.collider(architect, architectPlatform);
       this.physics.add.collider(architectPlatform, player);
       this.physics.add.collider(bugs, bugs);
       //TODO: This caused strange behavior
@@ -604,21 +633,20 @@
         switch (round) {
           case 1:
             roundComplete = true;
-            revealArchitect();
-            startBouncingBugsRound(player, bug);
+            roundTwo(player, bug);
             break;
 
           case 2:
-            startHackerRound(player, bug);
+            roundThree(player, bug);
             break;
 
           //This will never be hit because there are no bugs in the hacker round
           // case 3:
-          //   startFlyingBugsRound(player, bug);
+          //   roundFour(player, bug);
           //   break;
 
           case 4:
-            startFinalRound(player, bug);
+            roundFive(player, bug);
             break;
 
           case 5:
@@ -637,7 +665,7 @@
       }
     }
 
-    function startBouncingBugsRound(player, bug) {
+    function roundTwo(player, bug) {
       console.log("Start Round 2");
 
       intermissionTimer();
@@ -669,7 +697,7 @@
       }
     }
 
-    function startHackerRound(player, bug) {
+    function roundThree(player, bug) {
       console.log("Start Round 3");
 
       intermissionTimer();
@@ -698,7 +726,7 @@
       }
     }
 
-    function startFlyingBugsRound(player, bug) {
+    function roundFour(player, bug) {
       console.log("Start Round 4");
       bugText.setText("Bugs: " + bugCount);
 
@@ -734,7 +762,7 @@
       }
     }
 
-    function startFinalRound(player, bug) {
+    function roundFive(player, bug) {
       console.log("Start Round 5");
 
       intermissionTimer();
@@ -806,7 +834,6 @@
 
       for (var i = 0; i < 3; i++) {
         var item = Phaser.Utils.Array.RemoveRandomElement(coordinates);
-        console.log(item);
 
         var hacker = hackers.create(item[0], item[1], "dude");
         hacker.setBounce(0.2);
@@ -877,7 +904,7 @@
 
         setTimeout(function () {
           child.disableBody(true, true);
-          startFlyingBugsRound();
+          roundFour();
         }, 750);
       });
 
@@ -916,7 +943,51 @@
     }
 
     function revealArchitect() {
-       architectPlatform.setGravityY(-250);
+
+      if (hasArchitect) {
+        architectPlatform.setGravityY(-250);
+        architect.setGravityY(-250);
+
+        setTimeout(function () {
+          architect.anims.play("architect_action", true);
+        }, 1500);
+
+        setTimeout(function () {
+          console.log("Begin architect effect");
+          architectEffect();
+        }, 2500);
+      }
+    }
+
+    function dismissArchitect() {
+      architectPlatform.setGravityY(-500);
+      architect.anims.play("architect_action", false);
+    }
+
+    function explodeBug(child) {
+      // TODO: REPLACE WITH DIFFERENT ANIMATION
+      child.anims.play("flame", true);
+      setTimeout(function () {
+        child.disableBody(true, true);
+        bugCount--;
+        bugText.setText('Bugs: ' + bugCount);
+      }, 750);
+    }
+
+    function architectEffect() {
+      setTimeout(function () {
+
+        bugs.children.iterate(function (child) {
+          var result = Math.random() >= 0.5;;
+          if (result) {
+            explodeBug(child);
+          }
+        });
+      }, 2000);
+
+      setTimeout(function () {
+        dismissArchitect();
+      }, 2000);
     }
 
     function formatTime(seconds) {
