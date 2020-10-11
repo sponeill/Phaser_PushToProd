@@ -75,7 +75,7 @@
     var cursors;
     var bombs;
     var bugCount = 12;
-    var bugText;
+    //var bugText;
     var endRoundOne;
     var endRoundTwo;
     var round = 1;
@@ -100,6 +100,7 @@
     var preLaunchComplete = false;
     var hasArchitect = false;
     var numberOfArchitects = 0;
+    var hasFirewall = false;
 
     var game = new Phaser.Game(config);
 
@@ -117,7 +118,14 @@
       this.load.image("bomb", "assets/bomb_new.png");
       this.load.image("door", "assets/door.png");
       this.load.image("firewallPowerup", "assets/firewall.png");
+      this.load.image("firewallIcon", "assets/firewall_icon.png");
+      this.load.image("firewallIcon_grey", "assets/firewall_icon_grey.png");
       this.load.image("architectPowerup", "assets/architect_powerup.png");
+      this.load.image("architectIcon", "assets/architect_icon.png");
+      this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
+      this.load.image("sqlPowerup", "assets/sql.png");
+      this.load.image("sqlIcon", "assets/sql_icon.png");
+      this.load.image("sqlIcon_grey", "assets/sql_icon_grey.png");
       this.load.image("switch_red", "assets/switch_red.png");
       this.load.image("switch_green", "assets/switch_green.png");
       this.load.image("barrier", "assets/platform_barrier.png");
@@ -176,9 +184,20 @@
       //this.add.image(400, 300, "background_conflict");
 
       //Architect Keypress
-      this.input.keyboard.on('keydown_A', function() {
-        if(hasArchitect) {
+      this.input.keyboard.on('keydown_A', function () {
+        if (hasArchitect) {
           revealArchitect();
+        }else {
+          console.log("Architect not available");
+        }
+      });
+
+      //Firewall keypress
+      this.input.keyboard.on('keydown_F', function () {
+        if (hasFirewall) {
+          activateFirewall();
+        } else {
+          console.log("Firewall not available");
         }
       });
 
@@ -197,6 +216,19 @@
         callbackScope: this,
         loop: true,
       });
+
+      //Available Powerup Symbols
+      architectIcon = this.physics.add.sprite(30, 30, "architectIcon_grey");
+      architectIcon.setGravityY(-300);
+      architectIcon.visible = true;
+
+      sqlIcon = this.physics.add.sprite(80, 30, "sqlIcon_grey");
+      sqlIcon.setGravityY(-300);
+      sqlIcon.visible = true;
+
+      firewallIcon = this.physics.add.sprite(130, 30, "firewallIcon_grey");
+      firewallIcon.setGravityY(-300);
+      firewallIcon.visible = true;
 
       //Rocket
       rocket = this.physics.add.sprite(400, 592, "rocket");
@@ -383,6 +415,12 @@
         repeat: -1,
       });
 
+      this.anims.create({
+        key: "bug",
+        frames: [{ key: "bug", frame: 0 }],
+        frameRate: 20,
+      });
+
       //Enable Keyboard Inputs
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -409,11 +447,6 @@
 
       //Architect Powerup
       architectPowerups = this.physics.add.group();
-
-      //Available Powerup Symbols
-      architectIcon = this.physics.add.sprite(765, 570, "architectPowerup");
-      architectIcon.setGravityY(-300);
-      architectIcon.visible = false;
 
       //Adds the collision between the objects and the platforms
       this.physics.add.collider(player, platforms);
@@ -446,10 +479,10 @@
       this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
 
       //Bug Count
-      bugText = this.add.text(16, 16, "Bugs: 12", {
-        fontSize: "20px",
-        fill: "#FFFFFF",
-      });
+      //bugText = this.add.text(16, 16, "Bugs: 12", {
+      //fontSize: "20px",
+      //fill: "#FFFFFF",
+      //});
 
       //Round
       roundText = this.add.text(675, 16, "Round: 1", {
@@ -638,7 +671,7 @@
       bug.disableBody(true, true);
 
       bugCount -= 1;
-      bugText.setText("Bugs: " + bugCount);
+      //bugText.setText("Bugs: " + bugCount);
 
       if (bugs.countActive(true) === 0) {
         switch (round) {
@@ -682,7 +715,7 @@
       intermissionTimer();
 
       gameTimerText.visible = false;
-      bugText.visible = false;
+      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundOne.visible = true;
@@ -696,10 +729,11 @@
           round = 2;
           roundText.setText("Round: " + round);
           gameTimerText.visible = true;
-          bugText.visible = true;
+          //bugText.visible = true;
           roundText.visible = true;
 
           bugs.children.iterate(function (child) {
+            child.anims.play("bug", true);
             child.enableBody(true, child.x, 0, true, true);
             child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
             child.setGravityY(0);
@@ -714,7 +748,7 @@
       intermissionTimer();
 
       gameTimerText.visible = false;
-      bugText.visible = false;
+      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundTwo.visible = true;
@@ -724,7 +758,7 @@
       function beginNext() {
         setTimeout(function () {
           endRoundTwo.visible = false;
-          bugText.setText("Warning: Intruder Detected");
+          //bugText.setText("Warning: Intruder Detected");
           bugCount = 12;
           round = 3;
           roundText.setText("Round: " + round);
@@ -739,12 +773,12 @@
 
     function roundFour(player, bug) {
       console.log("Start Round 4");
-      bugText.setText("Bugs: " + bugCount);
+      //bugText.setText("Bugs: " + bugCount);
 
       intermissionTimer();
 
       gameTimerText.visible = false;
-      bugText.visible = false;
+      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundThree.visible = true;
@@ -759,10 +793,11 @@
           roundText.setText("Round: " + round);
 
           gameTimerText.visible = true;
-          bugText.visible = true;
+          //bugText.visible = true;
           roundText.visible = true;
 
           bugs.children.iterate(function (child) {
+            child.anims.play("bug", true);
             child.enableBody(true, child.x, 0, true, true);
             child.setBounce(1);
             child.setCollideWorldBounds(true);
@@ -779,7 +814,7 @@
       intermissionTimer();
 
       gameTimerText.visible = false;
-      bugText.visible = false;
+      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundFour.visible = true;
@@ -794,11 +829,12 @@
           roundText.setText("Round: " + round);
 
           gameTimerText.visible = true;
-          bugText.visible = true;
+          //bugText.visible = true;
           roundText.visible = true;
 
           //TODO: New Enemy Patterns & Add Hackers
           bugs.children.iterate(function (child) {
+            child.anims.play("bug", true);
             child.enableBody(true, child.x, 0, true, true);
             child.setBounce(1);
             child.setCollideWorldBounds(true);
@@ -813,10 +849,10 @@
       console.log("Intermission Timer Started");
       countDown = 11;
 
-      //Gives a 1 in 3 chance of getting an Architect Powerup
-      var dropArchitectPower = Math.random() >= 0.66;
+      //Gives a 40% chance of getting an Architect Powerup
+      var dropArchitectPower = Math.random() >= 0.60;
 
-      if(!hasArchitect && dropArchitectPower && numberOfArchitects <= 1) {
+      if (!hasArchitect && dropArchitectPower && numberOfArchitects <= 1) {
         dropArchitectPowerup();
       }
     }
@@ -902,18 +938,18 @@
     function dropArchitectPowerup() {
 
       var powerUp = architectPowerups.create(
-            Phaser.Math.Between(0, 800),
-            0,
-            "architectPowerup"
-          );
-          powerUp.setBounce(1);
-          powerUp.setGravityY(-100);
-          powerUp.setCollideWorldBounds(true);
-          powerUp.setVelocity(Phaser.Math.Between(-300, 300), 20);
+        Phaser.Math.Between(0, 800),
+        0,
+        "architectPowerup"
+      );
+      powerUp.setBounce(1);
+      powerUp.setGravityY(-100);
+      powerUp.setCollideWorldBounds(true);
+      powerUp.setVelocity(Phaser.Math.Between(-300, 300), 20);
 
       setTimeout(function () {
         powerUp.disableBody(true, true);
-        }, 5500);
+      }, 5500);
     }
 
     function hitBomb(player, bomb) {
@@ -928,10 +964,17 @@
       gameOver = true;
     }
 
-    function enableFirewall(player, star) {
+    function enableFirewall(player, powerup) {
+      powerup.disableBody(true, true);
+      hasFirewall = true;
+      firewallIcon.setTexture('firewallIcon');
+    }
+
+    function activateFirewall() {
       firewallUp = true;
       allowBombs = false;
-      star.disableBody(true, true);
+      hasFirewall = false;
+      firewallIcon.setTexture('firewallIcon_grey');
 
       hackers.children.iterate(function (child) {
         child.setVelocityX(0);
@@ -977,19 +1020,20 @@
       preLaunchComplete = true;
     }
 
-    function addArchitectPowerup(player, architectPowerup ) {
+    function addArchitectPowerup(player, architectPowerup) {
       hasArchitect = true;
       architectPowerup.disableBody(true, true);
       numberOfArchitects++;
-      architectIcon.visible = true;
+      architectIcon.setTexture('architectIcon');
     }
 
     function revealArchitect() {
 
       if (hasArchitect) {
+        hasArchitect = false;
+        architectIcon.setTexture('architectIcon_grey');
         architectPlatform.setGravityY(-250);
         architect.setGravityY(-250);
-        architectIcon.visible = false;
 
         setTimeout(function () {
           architect.anims.play("architect_action", true);
@@ -1003,6 +1047,7 @@
     }
 
     function dismissArchitect() {
+      //TODO: ONLY RETURN ARCHITECT TO HIS ORIGINAL HEIGHT
       architectPlatform.setGravityY(-500);
       architect.anims.play("architect_action", false);
     }
@@ -1013,7 +1058,7 @@
       setTimeout(function () {
         child.disableBody(true, true);
         bugCount--;
-        bugText.setText('Bugs: ' + bugCount);
+        //bugText.setText('Bugs: ' + bugCount);
       }, 750);
     }
 
