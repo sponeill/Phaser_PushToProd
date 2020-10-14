@@ -29,7 +29,7 @@
   <div class="row mt-3 mb-3">
     <div class="col text-center">
       <h1>Push to Prod</h1>
-      <h5>
+      <!-- <h5>
         Squash all the bugs reported by your client in order to finally launch
         their site! <br />
         Be careful though, the client may have their developers introduce some
@@ -37,7 +37,7 @@
         <br />
         Watch out for the "Bad Test Data" power up that will help you clear
         out some bugs quickly!
-      </h5>
+      </h5> -->
     </div>
   </div>
   <div class="row">
@@ -53,7 +53,7 @@
     var config = {
       type: Phaser.AUTO,
       width: 800,
-      height: 600,
+      height: 700,
       physics: {
         default: "arcade",
         arcade: {
@@ -64,7 +64,7 @@
       scene: {
         preload: preload,
         create: create,
-        update: update,
+        update: update
       },
       canvas: document.querySelector("canvas"),
     };
@@ -101,6 +101,7 @@
     var hasArchitect = false;
     var numberOfArchitects = 0;
     var hasFirewall = false;
+    var gameNotStarted = true;
 
     var game = new Phaser.Game(config);
 
@@ -111,6 +112,7 @@
       //   "assets/matrix_merge_conflict.png"
       // );
       this.load.image("rocket", "assets/rocket_small.png");
+      this.load.image("console_background", "assets/console_background.png");
       this.load.image("platform_small", "assets/platform_small.png");
       this.load.image("rocket_platform", "assets/rocket_platform.png");
       this.load.image("ground", "assets/platform.png");
@@ -201,6 +203,15 @@
         }
       });
 
+      //Firewall keypress
+      this.input.keyboard.on('keydown_ENTER', function () {
+        if (gameNotStarted) {
+          roundOne();
+        } else {
+          console.log("Game is running");
+        }
+      });
+
       // Countdown Timer
       timedEvent = this.time.addEvent({
         delay: 1000,
@@ -233,6 +244,28 @@
       //Rocket
       rocket = this.physics.add.sprite(400, 592, "rocket");
       rocket.setGravityY(-300);
+
+      //Console Background
+      this.add.image(400, 650, "console_background");
+
+      //Console Text
+      consoleText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press ENTER to execute PushToProd ..."]);
+      consoleText.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        backgroundColor: "black",
+      });
+      consoleText.visible = true;
+
+      consoleDefaultText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project>"]);
+      consoleDefaultText.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        backgroundColor: "black",
+      });
+      consoleDefaultText.visible = false;
 
       //Architect Platform
       architectPlatform = this.physics.add.sprite(400, -25, "platform_small");
@@ -430,13 +463,14 @@
         //Will create 12 bugs total, 1 original and 12 children
         repeat: 11,
         //Placement of generated bugs
-        setXY: { x: 12, y: 0, stepX: 70 },
+        setXY: { x: 12, y: -20, stepX: 70 },
       });
 
       bugs.children.iterate(function (child) {
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         //Gravity can be overridden on a body from the value set in the config above
         child.setGravityY(400);
+        child.disableBody(true);
       });
 
       //Bombs
@@ -489,78 +523,116 @@
         fontSize: "20px",
         fill: "#FFFFFF",
       });
+      roundText.visible = false;
+
+      //Start Round One Text
+      startRoundOne = this.add.text(15, 615, [
+        "Message: Go-Live Attempt Number: 17",
+        "         Please resolve all issues reported by the client immediately.",
+        "",
+        "Info:    Squashing bugs ...",
+      ]);
+      startRoundOne.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        backgroundColor: "black",
+      });
+      startRoundOne.visible = false;
 
       //End Round One Text
-      endRoundOne = this.add.text(60, 75, [
-        "You squashed all the bugs!",
-        "Unfortunately, the client's internal dev team introduced some new ones.",
+      endRoundOne = this.add.text(15, 615, [
+        "Message: Issues resolved ...",
+        "         Unfortunately, the client's internal dev team introduced some new ones.",
+        "Info:    Fixing someone else's problems ...",
       ]);
       endRoundOne.setStyle({
-        fontSize: "16px",
+        fontSize: "14px",
         fontFamily: "Courier",
-        align: "center",
+        align: "left",
         backgroundColor: "black",
       });
       endRoundOne.visible = false;
 
       //End Round Two Text
-      endRoundTwo = this.add.text(125, 75, [
-        "Who was in charge of site security?",
-        "It looks like we may have some intruders in the codebase",
-        "trying to drop some malicious code snippets.",
-        "Get the firewall configured and don't",
-        "touch any of that code they're are dropping in!",
+      endRoundTwo = this.add.text(15, 615, [
+        "Warning: Intruder Alert",
+        "         Malfeasance detected in the repository",
+        "         The firewall must be configured",
+        "         Do not touch any code dropped by the intruders",
       ]);
       endRoundTwo.setStyle({
-        fontSize: "16px",
+        fontSize: "14px",
         fontFamily: "Courier",
-        align: "center",
-        backgroundColor: "black",
+        align: "left",
+        color: "red",
+        backgroundColor: "yellow",
       });
       endRoundTwo.visible = false;
 
       //End Round Three Text
-      endRoundThree = this.add.text(150, 75, [
-        "Wasn't this project supposed to go live months ago?",
-        "Bad news, a junior dev apparently",
-        "resolved some merge conflicts with his eyes closed.",
-        "Get in their soldier!",
+      endRoundThree = this.add.text(15, 615, [
+        "Message: This project was supposed to go live months ago",
+        "         A recent merge conflict resolution by a junior dev left some things to be desired",
+        "         Clean it up"
       ]);
       endRoundThree.setStyle({
-        fontSize: "16px",
+        fontSize: "14px",
         fontFamily: "Courier",
-        align: "center",
+        align: "left",
         backgroundColor: "black",
       });
       endRoundThree.visible = false;
 
       //End Round Four Text
-      endRoundFour = this.add.text(90, 75, [
-        "Supposedly, this is the final FINAL list of issues from the client.",
-        "We'll see.",
+      endRoundFour = this.add.text(15, 615, [
+        "Message: Final FINAL list of issues inbound",
+        "         Unlikely ...",
       ]);
       endRoundFour.setStyle({
-        fontSize: "16px",
+        fontSize: "14px",
         fontFamily: "Courier",
-        align: "center",
+        align: "left",
         backgroundColor: "black",
       });
       endRoundFour.visible = false;
 
       //End Round Five Text
-      endRoundFive = this.add.text(50, 75, [
-        "You've finally gotten through the list of bugs,",
-        "secured the site, and completed your ToDo's.",
-        "The site is finally ready to launch!",
-        "Hit the green switch to go live before the client asks for a new feature!"
+      endRoundFive = this.add.text(15, 615, [
+        "Message: Issues Resolved, Site Secure, To-Do's finished",
+        "         Project is ready for PROD",
+        "         For the love of God, please hit the green switch to go live",
+        "         before the client asks for new features"
       ]);
       endRoundFive.setStyle({
-        fontSize: "16px",
+        fontSize: "14px",
         fontFamily: "Courier",
-        align: "center",
+        align: "left",
         backgroundColor: "black",
       });
       endRoundFive.visible = false;
+
+      //Summon Architect Text
+      summonArchitectText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> -summon Architect"]);
+      summonArchitectText.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        color: "yellow",
+        backgroundColor: "black",
+      });
+      summonArchitectText.visible = false;
+
+      //Summon Architect Text
+      enableFirewallText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press 'F' to enable firewall ..."]);
+      enableFirewallText.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        color: "yellow",
+        backgroundColor: "black",
+      });
+      enableFirewallText.visible = false;
 
       //Timer Text
       intermissionTimerText = this.add.text(375, 175, [countDown]);
@@ -578,7 +650,7 @@
         fontFamily: "Courier",
         align: "center",
       });
-      gameTimerText.visible = true;
+      gameTimerText.visible = false;
     }
 
     function update() {
@@ -709,13 +781,30 @@
       }
     }
 
+    function roundOne() {
+          consoleText.visible = false;
+          startRoundOne.visible = true;
+          gameNotStarted = false;
+          bugCount = 12;
+          round = 1;
+          roundText.setText("Round: " + round);
+          gameTimerText.visible = true;
+          roundText.visible = true;
+
+          bugs.children.iterate(function (child) {
+            child.anims.play("bug", true);
+            child.enableBody(true, child.x, 0, true, true);
+            child.setGravityY(0);
+          });
+    }
+
     function roundTwo(player, bug) {
       console.log("Start Round 2");
+      startRoundOne.visible = false;;
 
       intermissionTimer();
 
       gameTimerText.visible = false;
-      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundOne.visible = true;
@@ -725,11 +814,11 @@
       function beginNext() {
         setTimeout(function () {
           endRoundOne.visible = false;
+          consoleDefaultText.visible = true;
           bugCount = 12;
           round = 2;
           roundText.setText("Round: " + round);
           gameTimerText.visible = true;
-          //bugText.visible = true;
           roundText.visible = true;
 
           bugs.children.iterate(function (child) {
@@ -748,7 +837,6 @@
       intermissionTimer();
 
       gameTimerText.visible = false;
-      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundTwo.visible = true;
@@ -758,7 +846,7 @@
       function beginNext() {
         setTimeout(function () {
           endRoundTwo.visible = false;
-          //bugText.setText("Warning: Intruder Detected");
+          consoleDefaultText.visible = true;
           bugCount = 12;
           round = 3;
           roundText.setText("Round: " + round);
@@ -773,12 +861,10 @@
 
     function roundFour(player, bug) {
       console.log("Start Round 4");
-      //bugText.setText("Bugs: " + bugCount);
 
       intermissionTimer();
 
       gameTimerText.visible = false;
-      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundThree.visible = true;
@@ -788,12 +874,12 @@
       function beginNext() {
         setTimeout(function () {
           endRoundThree.visible = false;
+          consoleDefaultText.visible = true;
           bugCount = 12;
           round = 4;
           roundText.setText("Round: " + round);
 
           gameTimerText.visible = true;
-          //bugText.visible = true;
           roundText.visible = true;
 
           bugs.children.iterate(function (child) {
@@ -814,7 +900,6 @@
       intermissionTimer();
 
       gameTimerText.visible = false;
-      //bugText.visible = false;
       roundText.visible = false;
 
       endRoundFour.visible = true;
@@ -824,12 +909,12 @@
       function beginNext() {
         setTimeout(function () {
           endRoundFour.visible = false;
+          consoleDefaultText.visible = true;
           bugCount = 12;
           round = 5;
           roundText.setText("Round: " + round);
 
           gameTimerText.visible = true;
-          //bugText.visible = true;
           roundText.visible = true;
 
           //TODO: New Enemy Patterns & Add Hackers
@@ -967,6 +1052,7 @@
     function enableFirewall(player, powerup) {
       powerup.disableBody(true, true);
       hasFirewall = true;
+      enableFirewallText.visible = true;
       firewallIcon.setTexture('firewallIcon');
     }
 
@@ -974,6 +1060,7 @@
       firewallUp = true;
       allowBombs = false;
       hasFirewall = false;
+      enableFirewallText.visible = false;
       firewallIcon.setTexture('firewallIcon_grey');
 
       hackers.children.iterate(function (child) {
@@ -1031,6 +1118,7 @@
 
       if (hasArchitect) {
         hasArchitect = false;
+        summonArchitectText.visible = true;
         architectIcon.setTexture('architectIcon_grey');
         architectPlatform.setGravityY(-250);
         architect.setGravityY(-250);
@@ -1048,6 +1136,7 @@
 
     function dismissArchitect() {
       //TODO: ONLY RETURN ARCHITECT TO HIS ORIGINAL HEIGHT
+       summonArchitectText.visible = false;
       architectPlatform.setGravityY(-500);
       architect.anims.play("architect_action", false);
     }
