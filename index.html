@@ -179,6 +179,10 @@
         frameWidth: 49,
         frameHeight: 49,
       });
+      this.load.spritesheet("explosion", "assets/explosion.png", {
+        frameWidth: 49,
+        frameHeight: 49,
+      });
     }
 
     function create() {
@@ -246,7 +250,7 @@
       rocket.setGravityY(-300);
 
       //Console Background
-      this.add.image(400, 650, "console_background");
+      this.add.image(400, 645, "console_background");
 
       //Console Text
       consoleText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press ENTER to execute PushToProd ..."]);
@@ -312,6 +316,7 @@
       platformBarriers.create(815, 510, "barrier", null, false, true);
       platformBarriers.create(398, 260, "barrier", null, false, true);
       platformBarriers.create(398, 140, "barrier", null, false, true);
+      platformBarriers.create(398, -120, "barrier", null, false, true);
 
       //Player
       player = this.physics.add.sprite(100, 510, "jepack_dude");
@@ -437,6 +442,17 @@
         repeat: -1,
       });
 
+      
+      this.anims.create({
+        key: "explosion",
+        frames: this.anims.generateFrameNumbers("explosion", {
+          start: 0,
+          end: 64,
+        }),
+        frameRate: 50,
+        repeat: -1,
+      });
+
 
       this.anims.create({
         key: "bomb_sprite",
@@ -501,7 +517,7 @@
       this.physics.add.collider(player, bombs, hitBomb, null, this);
       this.physics.add.collider(architectPlatform, platformBarriers);
       this.physics.add.collider(architect, architectPlatform);
-      this.physics.add.collider(architectPlatform, player);
+      this.physics.add.collider(architect, platformBarriers);
       this.physics.add.collider(bugs, bugs);
       //TODO: This caused strange behavior
       //this.physics.add.collider(architectPlatform, bugs);
@@ -1142,13 +1158,11 @@
     }
 
     function explodeBug(child) {
-      // TODO: REPLACE WITH DIFFERENT ANIMATION
-      child.anims.play("flame", true);
+      child.anims.play("explosion", true);
       setTimeout(function () {
         child.disableBody(true, true);
         bugCount--;
-        //bugText.setText('Bugs: ' + bugCount);
-      }, 750);
+      }, Phaser.Math.Between(250, 1250));
     }
 
     function architectEffect() {
