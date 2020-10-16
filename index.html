@@ -18,7 +18,15 @@
   <style type="text/css">
     body {
       margin: 0;
-      background-color: greenyellow;
+      background-color: white;
+    }
+
+    #left-side {
+      float: right;
+    }
+
+    #right-side {
+      float: left;
     }
   </style>
 </head>
@@ -26,26 +34,17 @@
 <body>
   <!-- Page Layout -->
 
-  <div class="row mt-3 mb-3">
-    <div class="col text-center">
-      <img src="assets/header_image.png"/>
-      <!-- <h5>
-        Squash all the bugs reported by your client in order to finally launch
-        their site! <br />
-        Be careful though, the client may have their developers introduce some
-        new bugs before you're through.
-        <br />
-        Watch out for the "Bad Test Data" power up that will help you clear
-        out some bugs quickly!
-      </h5> -->
-    </div>
-  </div>
   <div class="row">
-    <div class="col"></div>
     <div class="col">
+      <img id="left-side" src="assets/LeftSide.png"/>
+    </div>
+    <div class="col">
+      <img src="assets/header_image.png"/>
       <canvas></canvas>
     </div>
-    <div class="col"></div>
+    <div class="col">
+      <img id="right-side" src="assets/RightSide.png"/>
+    </div>
   </div>
 
   <!-- Game Script -->
