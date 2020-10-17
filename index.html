@@ -36,14 +36,14 @@
 
   <div class="row">
     <div class="col">
-      <img id="left-side" src="assets/LeftSide.png"/>
+      <img id="left-side" src="assets/LeftSide.png" />
     </div>
     <div class="col">
-      <img src="assets/header_image.png"/>
+      <img src="assets/header_image.png" />
       <canvas></canvas>
     </div>
     <div class="col">
-      <img id="right-side" src="assets/RightSide.png"/>
+      <img id="right-side" src="assets/RightSide.png" />
     </div>
   </div>
 
@@ -98,7 +98,9 @@
     var rocketCollider;
     var preLaunchComplete = false;
     var hasArchitect = false;
+    var hasDataBomb = false;
     var numberOfArchitects = 0;
+    var numberOfDataBombs = 0;
     var hasFirewall = false;
     var gameNotStarted = true;
 
@@ -124,7 +126,7 @@
       this.load.image("architectPowerup", "assets/architect_powerup.png");
       this.load.image("architectIcon", "assets/architect_icon.png");
       this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
-      this.load.image("sqlPowerup", "assets/sql.png");
+      this.load.image("dataBomb", "assets/sql.png");
       this.load.image("sqlIcon", "assets/sql_icon.png");
       this.load.image("sqlIcon_grey", "assets/sql_icon_grey.png");
       this.load.image("switch_red", "assets/switch_red.png");
@@ -192,13 +194,22 @@
       this.input.keyboard.on('keydown_A', function () {
         if (hasArchitect) {
           revealArchitect();
-        }else {
+        } else {
           console.log("Architect not available");
         }
       });
 
+      //Data Bomb Keypress
+      this.input.keyboard.on('keydown_S', function () {
+        if (hasDataBomb) {
+          useDataBomb();
+        } else {
+          console.log("Data Bomb not available");
+        }
+      });
+
       //Firewall keypress
-      this.input.keyboard.on('keydown_F', function () {
+      this.input.keyboard.on('keydown_D', function () {
         if (hasFirewall) {
           activateFirewall();
         } else {
@@ -206,7 +217,12 @@
         }
       });
 
-      //Firewall keypress
+      //Launch keypress
+      this.input.keyboard.on('keydown_W', function () {
+        launchRocket();
+      });
+
+      //Start Game keypress
       this.input.keyboard.on('keydown_ENTER', function () {
         if (gameNotStarted) {
           roundOne();
@@ -441,7 +457,7 @@
         repeat: -1,
       });
 
-      
+
       this.anims.create({
         key: "explosion",
         frames: this.anims.generateFrameNumbers("explosion", {
@@ -497,6 +513,9 @@
       //Architect Powerup
       architectPowerups = this.physics.add.group();
 
+      //Architect Powerup
+      dataBombs = this.physics.add.group();
+
       //Adds the collision between the objects and the platforms
       this.physics.add.collider(player, platforms);
       this.physics.add.collider(hackers, platforms);
@@ -512,20 +531,19 @@
       this.physics.add.collider(bombs, platforms);
       this.physics.add.collider(firewallPowerups, platforms);
       this.physics.add.collider(architectPowerups, platforms);
+      this.physics.add.collider(dataBombs, platforms);
       this.physics.add.collider(player, hackers);
       this.physics.add.collider(player, bombs, hitBomb, null, this);
       this.physics.add.collider(architectPlatform, platformBarriers);
       this.physics.add.collider(architect, architectPlatform);
       this.physics.add.collider(architect, platformBarriers);
       this.physics.add.collider(bugs, bugs);
-      //TODO: This caused strange behavior
-      //this.physics.add.collider(architectPlatform, bugs);
 
       //Overlaps Events
       this.physics.add.overlap(player, bugs, squashBugs, null, this);
-      this.physics.add.overlap(player, redSwitch, launchRocket, null, this);
       this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
       this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
+      this.physics.add.overlap(player, dataBombs, addDataBomb, null, this);
 
       //Bug Count
       //bugText = this.add.text(16, 16, "Bugs: 12", {
@@ -587,9 +605,8 @@
 
       //End Round Three Text
       endRoundThree = this.add.text(15, 615, [
-        "Message: This project was supposed to go live months ago",
-        "         A recent merge conflict resolution by a junior dev left some things to be desired",
-        "         Clean it up"
+        "Info:      Go-Live Date #47",
+        "MessageL:  A recent merge conflict resolution by a junior dev left has set us back again",
       ]);
       endRoundThree.setStyle({
         fontSize: "14px",
@@ -601,8 +618,8 @@
 
       //End Round Four Text
       endRoundFour = this.add.text(15, 615, [
-        "Message: Final FINAL list of issues inbound",
-        "         Unlikely ...",
+        "Message: The FINAL final list of issues inbound from client",
+        "Info:    This is highly unlikely",
       ]);
       endRoundFour.setStyle({
         fontSize: "14px",
@@ -616,7 +633,7 @@
       endRoundFive = this.add.text(15, 615, [
         "Message: Issues Resolved, Site Secure, To-Do's finished",
         "         Project is ready for PROD",
-        "         For the love of God, please hit the green switch to go live",
+        "         For the love of God, please launch the project",
         "         before the client asks for new features"
       ]);
       endRoundFive.setStyle({
@@ -648,6 +665,17 @@
         backgroundColor: "black",
       });
       enableFirewallText.visible = false;
+
+      //Launch Text
+      launchText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press 'W' to launch the project ..."]);
+      launchText.setStyle({
+        fontSize: "14px",
+        fontFamily: "Courier",
+        align: "left",
+        color: "yellow",
+        backgroundColor: "black",
+      });
+      launchText.visible = false;
 
       //Timer Text
       intermissionTimerText = this.add.text(375, 175, [countDown]);
@@ -797,20 +825,20 @@
     }
 
     function roundOne() {
-          consoleText.visible = false;
-          startRoundOne.visible = true;
-          gameNotStarted = false;
-          bugCount = 12;
-          round = 1;
-          roundText.setText("Round: " + round);
-          gameTimerText.visible = true;
-          roundText.visible = true;
+      consoleText.visible = false;
+      startRoundOne.visible = true;
+      gameNotStarted = false;
+      bugCount = 12;
+      round = 1;
+      roundText.setText("Round: " + round);
+      gameTimerText.visible = true;
+      roundText.visible = true;
 
-          bugs.children.iterate(function (child) {
-            child.anims.play("bug", true);
-            child.enableBody(true, child.x, 0, true, true);
-            child.setGravityY(0);
-          });
+      bugs.children.iterate(function (child) {
+        child.anims.play("bug", true);
+        child.enableBody(true, child.x, 0, true, true);
+        child.setGravityY(0);
+      });
     }
 
     function roundTwo(player, bug) {
@@ -1049,7 +1077,23 @@
 
       setTimeout(function () {
         powerUp.disableBody(true, true);
-      }, 5500);
+      }, 7500);
+    }
+
+    function dropDataBomb() {
+      var powerUp = dataBombs.create(
+        Phaser.Math.Between(0, 800),
+        0,
+        "dataBomb"
+      );
+      powerUp.setBounce(1);
+      powerUp.setGravityY(-100);
+      powerUp.setCollideWorldBounds(true);
+      powerUp.setVelocity(Phaser.Math.Between(-300, 300), 20);
+
+      setTimeout(function () {
+        powerUp.disableBody(true, true);
+      }, 7500);
     }
 
     function hitBomb(player, bomb) {
@@ -1062,6 +1106,13 @@
       player.anims.play("turn");
 
       gameOver = true;
+    }
+
+    function useDataBomb() {
+      hasDataBomb = false;
+      sqlIcon.setTexture('sqlIcon_grey');
+
+      //TODO: POWER EFFECT - LARGE EXPLOSION WIPES ENTIRE BOARD
     }
 
     function enableFirewall(player, powerup) {
@@ -1098,18 +1149,15 @@
       });
     }
 
-    function launchRocket(player, redSwitch) {
-      console.log("Switch Hit. Bug Count: " + bugCount);
+    function launchRocket() {
       if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
-
-        endRoundFive.visible = false;
-        // countDown = 3;
+        //countDown = 3;
 
         setTimeout(function () {
           //this.cameras.main.shake(500);
           rocket.setVelocityY(-600);
           launched = true;
-        }, 3000);
+        }, 1000);
       }
     }
 
@@ -1120,6 +1168,11 @@
       this.physics.world.removeCollider(rocketCollider);
 
       preLaunchComplete = true;
+
+      setTimeout(function () {
+        endRoundFive.visible = false;
+        launchText.visible = true;
+      }, 5000);
     }
 
     function addArchitectPowerup(player, architectPowerup) {
@@ -1127,6 +1180,13 @@
       architectPowerup.disableBody(true, true);
       numberOfArchitects++;
       architectIcon.setTexture('architectIcon');
+    }
+
+    function addDataBomb(player, dataBomb) {
+      hasDataBomb = true;
+      dataBomb.disableBody(true, true);
+      numberOfDataBombs++;
+      sqlIcon.setTexture('sqlIcon');
     }
 
     function revealArchitect() {
