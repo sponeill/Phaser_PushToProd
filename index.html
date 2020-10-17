@@ -606,7 +606,7 @@
       //End Round Three Text
       endRoundThree = this.add.text(15, 615, [
         "Info:      Go-Live Date #47",
-        "MessageL:  A recent merge conflict resolution by a junior dev left has set us back again",
+        "Message:   A recent merge conflict resolution by a junior dev left has set us back again",
       ]);
       endRoundThree.setStyle({
         fontSize: "14px",
@@ -984,10 +984,10 @@
         dropArchitectPowerup();
       }
 
-      //Gives a 25% chance of getting a Data Bomb
-      var dropDataBomb = Math.random() >= 0.75;
+      //Gives a 33% chance of getting a Data Bomb
+      var dropDataBomb = Math.random() >= 0.66;
 
-      if (!hasDataBomb && !dropArchitectPower && dropDataBomb && numberOfDataBombs == 0) {
+      if (!hasDataBomb && dropDataBomb && numberOfDataBombs == 0) {
         dropDataBomb();
       }
     }
