@@ -983,6 +983,13 @@
       if (!hasArchitect && dropArchitectPower && numberOfArchitects <= 1) {
         dropArchitectPowerup();
       }
+
+      //Gives a 25% chance of getting a Data Bomb
+      var dropDataBomb = Math.random() >= 0.75;
+
+      if (!hasDataBomb && !dropArchitectPower && dropDataBomb && numberOfDataBombs == 0) {
+        dropDataBomb();
+      }
     }
 
     function decrementCountdown() {
