@@ -96,6 +96,7 @@ function roundOne() {
         round = 4;
         roundText.setText("Round: " + round);
 
+        isMergeConflict = true;
         gameTimerText.visible = true;
         roundText.visible = true;
 
@@ -113,6 +114,7 @@ function roundOne() {
 
   function roundFive(player, bug) {
     console.log("Start Round 5");
+     isMergeConflict = false;
 
     intermissionTimer();
 

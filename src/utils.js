@@ -9,9 +9,9 @@ function formatTime(seconds) {
     return `${minutes}:${partInSeconds}`;
   }
 
-  function decrementGameTimer() {
+  function incrementGameTimer() {
     if (gameTimerText.visible === true) {
-      gameTimer -= 1; // One second
+      gameTimer += 1; // One second
       gameTimerText.setText(formatTime(gameTimer));
     }
   }

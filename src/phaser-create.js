@@ -1,7 +1,11 @@
 function create() {
     this.add.image(400, 300, "background");
-    //this.add.image(400, 300, "background_conflict");
-
+  
+    //Merge Conflicts
+  conflicts = this.physics.add.staticGroup();
+  conflicts.create(400, 300, "background_conflict", null, false, true);
+  conflicts.create(250, 175, "ground", null, false, true);
+  
     //Architect Keypress
     this.input.keyboard.on('keydown_A', function () {
       if (hasArchitect) {
@@ -54,7 +58,7 @@ function create() {
     // Game timer
     timedEvent = this.time.addEvent({
       delay: 1000,
-      callback: decrementGameTimer,
+      callback: incrementGameTimer,
       callbackScope: this,
       loop: true,
     });

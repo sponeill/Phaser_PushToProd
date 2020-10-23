@@ -66,7 +66,7 @@ function update() {
       var y = hacker.y;
 
       if (
-        lastBombRelease - gameTimer > 5 &&
+        gameTimer - lastBombRelease > 5 &&
         bombCount <= 4 &&
         allowBombs &&
         !firewallUp
@@ -78,5 +78,11 @@ function update() {
         lastBombRelease = gameTimer;
         bombCount++;
       }
+    }
+    
+    if (isMergeConflict) {
+      conflicts.children.iterate(function (child) {
+      child.visible = true;
+      });
     }
   }

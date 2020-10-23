@@ -31,13 +31,13 @@
   var launched = false;
   var facingRight = true;
   var countDown = 10;
-  var gameTimer = 180;
+  var gameTimer = 0;
   var timedEvent;
   var gameTimerEvent;
   var roundComplete = false;
   var hackers;
   var platformBarriers;
-  var lastBombRelease = 180;
+  var lastBombRelease = 0;
   var bombCount = 0;
   var firewallPowerups;
   var architectPowerups;
@@ -51,15 +51,16 @@
   var numberOfDataBombs = 0;
   var hasFirewall = false;
   var gameNotStarted = true;
+  var isMergeConflict = false;
 
   var game = new Phaser.Game(config);
 
   function preload() {
     this.load.image("background", "assets/matrix.png");
-    // this.load.image(
-    //   "background_conflict",
-    //   "assets/matrix_merge_conflict.png"
-    // );
+    this.load.image(
+      "background_conflict",
+      "assets/matrix_merge_conflict.png"
+    );
     this.load.image("rocket", "assets/rocket_small.png");
     this.load.image("console_background", "assets/console_background.png");
     this.load.image("platform_small", "assets/platform_small.png");
@@ -234,7 +235,6 @@ function hitBomb(player, bomb) {
     gameOver = true;
 }
   
-
 function launchRocket() {
     if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
       //countDown = 3;

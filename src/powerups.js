@@ -29,8 +29,8 @@ function revealArchitect() {
       hasArchitect = false;
       summonArchitectText.visible = true;
       architectIcon.setTexture('architectIcon_grey');
-      architectPlatform.setGravityY(-250);
-      architect.setGravityY(-250);
+      architectPlatform.setGravityY(-150);
+      architect.setGravityY(-150);
 
       setTimeout(function () {
         architect.anims.play("architect_action", true);
