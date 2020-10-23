@@ -80,9 +80,13 @@ function update() {
       }
     }
     
-    if (isMergeConflict) {
-      conflicts.children.iterate(function (child) {
-      child.visible = true;
+  if (isMergeConflict && !mergeConflictShown) {
+      mergeConflictShown = true;
+
+    conflicts.children.iterate(function (child) {
+        child.enableBody(true);
+        child.visible = true;
+        child.angle = child.angle + Phaser.Math.Between(15, 45);
       });
     }
   }

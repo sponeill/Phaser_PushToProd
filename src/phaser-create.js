@@ -5,6 +5,11 @@ function create() {
   conflicts = this.physics.add.staticGroup();
   conflicts.create(400, 300, "background_conflict", null, false, true);
   conflicts.create(250, 175, "ground", null, false, true);
+  conflicts.create(750, 375, "ground", null, false, true);
+  conflicts.create(50, 675, "platform_small", null, false, true);
+  conflicts.children.iterate(function (child) {
+    child.disableBody(true);
+  })
   
     //Architect Keypress
     this.input.keyboard.on('keydown_A', function () {
@@ -354,6 +359,8 @@ function create() {
     this.physics.add.collider(architect, architectPlatform);
     this.physics.add.collider(architect, platformBarriers);
     this.physics.add.collider(bugs, bugs);
+    this.physics.add.collider(bugs, conflicts);
+    this.physics.add.collider(player, conflicts);
 
     //Overlaps Events
     this.physics.add.overlap(player, bugs, squashBugs, null, this);

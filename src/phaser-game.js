@@ -52,6 +52,7 @@
   var hasFirewall = false;
   var gameNotStarted = true;
   var isMergeConflict = false;
+  var mergeConflictShown = false;
 
   var game = new Phaser.Game(config);
 
