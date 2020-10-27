@@ -53,6 +53,7 @@
   var gameNotStarted = true;
   var isMergeConflict = false;
   var mergeConflictShown = false;
+  var lastBugSpawn = 0;
 
   var game = new Phaser.Game(config);
 

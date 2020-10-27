@@ -1,150 +1,161 @@
 function roundOne() {
-    consoleText.visible = false;
-    startRoundOne.visible = true;
-    gameNotStarted = false;
-    bugCount = 12;
-    round = 1;
-    roundText.setText("Round: " + round);
-    gameTimerText.visible = true;
-    roundText.visible = true;
+  consoleText.visible = false;
+  startRoundOne.visible = true;
+  gameNotStarted = false;
+  bugCount = 12;
+  round = 1;
+  roundText.setText("Round: " + round);
+  gameTimerText.visible = true;
+  roundText.visible = true;
 
-    bugs.children.iterate(function (child) {
-      child.anims.play("bug", true);
-      child.enableBody(true, child.x, 0, true, true);
-      child.setGravityY(0);
-    });
+  bugs.children.iterate(function (child) {
+    child.anims.play("bug", true);
+    child.enableBody(true, child.x, 0, true, true);
+    child.setGravityY(0);
+  });
+}
+
+function roundTwo(player, bug) {
+  console.log("Start Round 2");
+  startRoundOne.visible = false;;
+
+  intermissionTimer();
+
+  gameTimerText.visible = false;
+  roundText.visible = false;
+
+  endRoundOne.visible = true;
+
+  beginNext();
+
+  function beginNext() {
+    setTimeout(function () {
+      endRoundOne.visible = false;
+      consoleDefaultText.visible = true;
+      bugCount = 12;
+      round = 2;
+      roundText.setText("Round: " + round);
+      gameTimerText.visible = true;
+      roundText.visible = true;
+
+      bugs.children.iterate(function (child) {
+        child.anims.play("bug", true);
+        child.enableBody(true, child.x, 0, true, true);
+        child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
+        child.setGravityY(0);
+      });
+    }, 10500);
   }
+}
 
-  function roundTwo(player, bug) {
-    console.log("Start Round 2");
-    startRoundOne.visible = false;;
+function roundThree(player, bug) {
+  console.log("Start Round 3");
 
-    intermissionTimer();
+  intermissionTimer();
 
-    gameTimerText.visible = false;
-    roundText.visible = false;
+  gameTimerText.visible = false;
+  roundText.visible = false;
 
-    endRoundOne.visible = true;
+  endRoundTwo.visible = true;
 
-    beginNext();
+  beginNext();
 
-    function beginNext() {
-      setTimeout(function () {
-        endRoundOne.visible = false;
-        consoleDefaultText.visible = true;
-        bugCount = 12;
-        round = 2;
-        roundText.setText("Round: " + round);
-        gameTimerText.visible = true;
-        roundText.visible = true;
+  function beginNext() {
+    setTimeout(function () {
+      endRoundTwo.visible = false;
+      consoleDefaultText.visible = true;
+      bugCount = 12;
+      round = 3;
+      roundText.setText("Round: " + round);
 
-        bugs.children.iterate(function (child) {
-          child.anims.play("bug", true);
-          child.enableBody(true, child.x, 0, true, true);
-          child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
-          child.setGravityY(0);
-        });
-      }, 10500);
-    }
+      gameTimerText.visible = true;
+      roundText.visible = true;
+
+      spawnHacker();
+    }, 10500);
   }
+}
 
-  function roundThree(player, bug) {
-    console.log("Start Round 3");
+function roundFour(player, bug) {
+  console.log("Start Round 4");
 
-    intermissionTimer();
+  intermissionTimer();
 
-    gameTimerText.visible = false;
-    roundText.visible = false;
+  gameTimerText.visible = false;
+  roundText.visible = false;
 
-    endRoundTwo.visible = true;
+  endRoundThree.visible = true;
 
-    beginNext();
+  beginNext();
 
-    function beginNext() {
-      setTimeout(function () {
-        endRoundTwo.visible = false;
-        consoleDefaultText.visible = true;
-        bugCount = 12;
-        round = 3;
-        roundText.setText("Round: " + round);
+  function beginNext() {
+    setTimeout(function () {
+      endRoundThree.visible = false;
+      consoleDefaultText.visible = true;
+      bugCount = 12;
+      round = 4;
+      roundText.setText("Round: " + round);
 
-        gameTimerText.visible = true;
-        roundText.visible = true;
+      isMergeConflict = true;
+      gameTimerText.visible = true;
+      roundText.visible = true;
 
-        spawnHacker();
-      }, 10500);
-    }
+      bugs.children.iterate(function (child) {
+        child.anims.play("bug", true);
+        child.enableBody(true, child.x, 0, true, true);
+        child.setBounce(1);
+        child.setCollideWorldBounds(true);
+        child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        child.setGravityY(0);
+      });
+    }, 10500);
   }
+}
 
-  function roundFour(player, bug) {
-    console.log("Start Round 4");
+function roundFive(player, bug) {
+  console.log("Start Round 5");
+  isMergeConflict = false;
 
-    intermissionTimer();
+  intermissionTimer();
 
-    gameTimerText.visible = false;
-    roundText.visible = false;
+  gameTimerText.visible = false;
+  roundText.visible = false;
 
-    endRoundThree.visible = true;
+  endRoundFour.visible = true;
 
-    beginNext();
+  beginNext();
 
-    function beginNext() {
-      setTimeout(function () {
-        endRoundThree.visible = false;
-        consoleDefaultText.visible = true;
-        bugCount = 12;
-        round = 4;
-        roundText.setText("Round: " + round);
+  function beginNext() {
+    setTimeout(function () {
+      endRoundFour.visible = false;
+      consoleDefaultText.visible = true;
+      bugCount = 12;
+      round = 5;
+      roundText.setText("Round: " + round);
 
-        isMergeConflict = true;
-        gameTimerText.visible = true;
-        roundText.visible = true;
-
-        bugs.children.iterate(function (child) {
-          child.anims.play("bug", true);
-          child.enableBody(true, child.x, 0, true, true);
-          child.setBounce(1);
-          child.setCollideWorldBounds(true);
-          child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-          child.setGravityY(0);
-        });
-      }, 10500);
-    }
+      gameTimerText.visible = true;
+      roundText.visible = true;
+    }, 10500);
   }
+}
 
-  function roundFive(player, bug) {
-    console.log("Start Round 5");
-     isMergeConflict = false;
+function spawnBug() {
 
-    intermissionTimer();
+  var coordinates = [
+    [825, 115],
+    [825, 290],
+    [825, 475]
+  ];
 
-    gameTimerText.visible = false;
-    roundText.visible = false;
+  var item = coordinates[Phaser.Math.Between(0, 2)];
 
-    endRoundFour.visible = true;
+  var bug = bugs.create(item[0], item[1], "bug");
+  bug.anims.play("bug", true);
+  bug.enableBody(true, item[0], item[1], true, true);
+  bug.setBounce(1);
+  bug.setCollideWorldBounds(false);
+  bug.setVelocityX(Phaser.Math.Between(-450, -300));
+  bug.setGravityY(-300);
 
-    beginNext();
-
-    function beginNext() {
-      setTimeout(function () {
-        endRoundFour.visible = false;
-        consoleDefaultText.visible = true;
-        bugCount = 12;
-        round = 5;
-        roundText.setText("Round: " + round);
-
-        gameTimerText.visible = true;
-        roundText.visible = true;
-
-        //TODO: New Enemy Patterns & Add Hackers
-        bugs.children.iterate(function (child) {
-          child.anims.play("bug", true);
-          child.enableBody(true, child.x, 0, true, true);
-          child.setBounce(1);
-          child.setCollideWorldBounds(true);
-          child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-          child.setGravityY(0);
-        });
-      }, 10500);
-    }
-  }
+  lastBugSpawn = gameTimer;
+};
