@@ -364,20 +364,12 @@ function create() {
     this.physics.add.collider(architect, architectPlatform);
     this.physics.add.collider(architect, platformBarriers);
     this.physics.add.collider(bugs, bugs);
-    // this.physics.add.collider(bugs, conflicts);
-    // this.physics.add.collider(player, conflicts);
 
     //Overlaps Events
     this.physics.add.overlap(player, bugs, squashBugs, null, this);
     this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
     this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
     this.physics.add.overlap(player, dataBombs, addAntiGravity, null, this);
-
-    //Bug Count
-    //bugText = this.add.text(16, 16, "Bugs: 12", {
-    //fontSize: "20px",
-    //fill: "#FFFFFF",
-    //});
 
     //Round
     roundText = this.add.text(675, 16, "Round: 1", {
@@ -403,9 +395,8 @@ function create() {
 
     //End Round One Text
     endRoundOne = this.add.text(15, 615, [
-      "Message: Issues resolved ...",
+      "Message: Issues resolved.",
       "         Unfortunately, the client's internal dev team introduced some new ones.",
-      "Info:    Fixing someone else's problems ...",
     ]);
     endRoundOne.setStyle({
       fontSize: "14px",
@@ -433,8 +424,8 @@ function create() {
 
     //End Round Three Text
     endRoundThree = this.add.text(15, 615, [
-      "Info:      Go-Live Date #47",
-      "Message:   A recent merge conflict resolution by a junior dev left has set us back again",
+      "Warning:   Merge Conflict Detected",
+      "Message:   Move the code blocks to their appropriate locations to resolve the conflict"
     ]);
     endRoundThree.setStyle({
       fontSize: "14px",
