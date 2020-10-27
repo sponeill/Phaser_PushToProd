@@ -118,8 +118,7 @@ function roundFive(player, bug) {
 
   conflicts.children.iterate(function (child) {
     child.disableBody(true, true);
-    child.visible = true;
-    child.angle = child.angle + Phaser.Math.Between(15, 45);
+    child.visible = false;
   });
 
   intermissionTimer();

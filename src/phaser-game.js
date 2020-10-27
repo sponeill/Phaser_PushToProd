@@ -78,8 +78,8 @@
     this.load.image("architectPowerup", "assets/architect_powerup.png");
     this.load.image("architectIcon", "assets/architect_icon.png");
     this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
-    //TODO: RENAME ALL DATA BOMB REFERENCES TO ANTIGRAVITY AND CREATE NEW SPRITES
-    this.load.image("dataBomb", "assets/sql.png");
+    //TODO: CREATE NEW SPRITES
+    this.load.image("antiGravityPowerup", "assets/sql.png");
     this.load.image("sqlIcon", "assets/sql_icon.png");
     this.load.image("sqlIcon_grey", "assets/sql_icon_grey.png");
     this.load.image("switch_red", "assets/switch_red.png");

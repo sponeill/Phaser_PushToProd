@@ -31,7 +31,7 @@ function formatTime(seconds) {
     var dropAntiGravity = Math.random() >= 0.66;
 
     if (!hasAntiGravity && dropAntiGravity && numberOfAntiGravityPowerups == 0) {
-        dropAntiGravity();
+        dropAntiGravityPowerup();
     }
   }
 

@@ -339,7 +339,7 @@ function create() {
     architectPowerups = this.physics.add.group();
 
     //Architect Powerup
-    dataBombs = this.physics.add.group();
+    antiGravityPowerups = this.physics.add.group();
 
     //Adds the collision between the objects and the platforms
     this.physics.add.collider(player, platforms);
@@ -356,7 +356,7 @@ function create() {
     this.physics.add.collider(bombs, platforms);
     this.physics.add.collider(firewallPowerups, platforms);
     this.physics.add.collider(architectPowerups, platforms);
-    this.physics.add.collider(dataBombs, platforms);
+    this.physics.add.collider(antiGravityPowerups, platforms);
     this.physics.add.collider(player, hackers);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
     this.physics.add.collider(bugs, leftBarriers, disableBugs, null, this);
@@ -369,7 +369,7 @@ function create() {
     this.physics.add.overlap(player, bugs, squashBugs, null, this);
     this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
     this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
-    this.physics.add.overlap(player, dataBombs, addAntiGravity, null, this);
+    this.physics.add.overlap(player, antiGravityPowerups, addAntiGravity, null, this);
 
     //Round
     roundText = this.add.text(675, 16, "Round: 1", {

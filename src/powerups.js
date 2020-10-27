@@ -106,14 +106,15 @@ function explodeBug(child) {
         child.disableBody(true, true);
       }, 750);
     });
-  }
+}
 
 // Anti-Gravity
- function dropAntiGravity() {
-    var powerUp = dataBombs.create(
+
+function dropAntiGravityPowerup() {
+    var powerUp = antiGravityPowerups.create(
       Phaser.Math.Between(0, 800),
       0,
-      "dataBomb"
+      "antiGravityPowerup"
     );
     powerUp.setBounce(1);
     powerUp.setGravityY(-100);
@@ -125,20 +126,20 @@ function explodeBug(child) {
     }, 7500);
 }
 
-function addAntiGravity(player, dataBomb) {
+function addAntiGravity(player, antiGravityPowerup) {
     hasAntiGravity = true;
-    dataBomb.disableBody(true, true);
+    antiGravityPowerup.disableBody(true, true);
     numberOfAntiGravityPowerups++;
     sqlIcon.setTexture('sqlIcon');
-  }
+}
   
- function useAntiGravity() {
+function useAntiGravity() {
 
     antiGravityEnabled = true;
 
     setTimeout(function() {
-        hasDataBomb = false;
+        hasAntiGravity = false;
         sqlIcon.setTexture('sqlIcon_grey');
         antiGravityEnabled = false;
     }, 10000);
-  }
+}
