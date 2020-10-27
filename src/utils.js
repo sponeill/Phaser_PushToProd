@@ -27,11 +27,11 @@ function formatTime(seconds) {
       dropArchitectPowerup();
     }
 
-    //Gives a 33% chance of getting a Data Bomb
-    var dropDataPowerup = Math.random() >= 0.66;
+    //Gives a 33% chance of getting Anti Gravity Power
+    var dropAntiGravity = Math.random() >= 0.66;
 
-    if (!hasDataBomb && dropDataPowerup && numberOfDataBombs == 0) {
-      dropDataBomb();
+    if (!hasAntiGravity && dropAntiGravity && numberOfAntiGravityPowerups == 0) {
+        dropAntiGravity();
     }
   }
 

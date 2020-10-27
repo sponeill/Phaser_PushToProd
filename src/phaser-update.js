@@ -35,9 +35,14 @@ function update() {
       player.anims.play("jump_left", true);
     }
 
-    if (player.body.touching.down) {
+    if(antiGravityEnabled) {
       player.setVelocityY(-330);
+    } else {
+      if (player.body.touching.down) {
+        player.setVelocityY(-330);
+      }
     }
+    
   }
 
   //Hacker Movements
@@ -84,6 +89,11 @@ function update() {
   if (isMergeConflict && !mergeConflictShown) {
     mergeConflictShown = true;
 
+    //TODO: Aracade physics only support axis aligned hitboxes so angled platforms wont work.
+    // Just rotate the background images 
+    // (additional platforms askew but not colliders and align them to real platforms inch by inch as the merge conflict is resolved piece by piece)
+    // Move "Code Blocks" to designated points in the game to resolve
+
     conflicts.children.iterate(function (child) {
       child.enableBody(true);
       child.visible = true;
@@ -92,7 +102,7 @@ function update() {
   }
 
   //Round Five Enemies
-  if(round === 5 && bugCount > 0 && gameTimer - lastBugSpawn >= 2) {
+  if (round === 5 && bugCount > 0 && gameTimer - lastBugSpawn >= 2) {
     spawnBug();
   }
 }

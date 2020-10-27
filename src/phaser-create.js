@@ -20,10 +20,10 @@ function create() {
       }
     });
 
-    //Data Bomb Keypress
+    //AntiGravity Keypress
     this.input.keyboard.on('keydown_S', function () {
-      if (hasDataBomb) {
-        useDataBomb();
+      if (hasAntiGravity) {
+        useAntiGravity();
       } else {
         console.log("Data Bomb not available");
       }
@@ -153,6 +153,10 @@ function create() {
     platformBarriers.create(398, 260, "barrier", null, false, true);
     platformBarriers.create(398, 140, "barrier", null, false, true);
     platformBarriers.create(398, -120, "barrier", null, false, true);
+
+    //Off-Screen Left Barrier
+    leftBarriers = this.physics.add.staticGroup();
+    leftBarriers.create(-25,350, "left_barrier", null, true, true);
 
     //Player
     player = this.physics.add.sprite(100, 510, "jepack_dude");
@@ -355,18 +359,19 @@ function create() {
     this.physics.add.collider(dataBombs, platforms);
     this.physics.add.collider(player, hackers);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
+    this.physics.add.collider(bugs, leftBarriers, disableBugs, null, this);
     this.physics.add.collider(architectPlatform, platformBarriers);
     this.physics.add.collider(architect, architectPlatform);
     this.physics.add.collider(architect, platformBarriers);
     this.physics.add.collider(bugs, bugs);
-    this.physics.add.collider(bugs, conflicts);
-    this.physics.add.collider(player, conflicts);
+    // this.physics.add.collider(bugs, conflicts);
+    // this.physics.add.collider(player, conflicts);
 
     //Overlaps Events
     this.physics.add.overlap(player, bugs, squashBugs, null, this);
     this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
     this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
-    this.physics.add.overlap(player, dataBombs, addDataBomb, null, this);
+    this.physics.add.overlap(player, dataBombs, addAntiGravity, null, this);
 
     //Bug Count
     //bugText = this.add.text(16, 16, "Bugs: 12", {

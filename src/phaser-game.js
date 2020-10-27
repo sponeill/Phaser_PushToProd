@@ -46,14 +46,15 @@
   var rocketCollider;
   var preLaunchComplete = false;
   var hasArchitect = false;
-  var hasDataBomb = false;
+  var hasAntiGravity = false;
   var numberOfArchitects = 0;
-  var numberOfDataBombs = 0;
+  var numberOfAntiGravityPowerups = 0;
   var hasFirewall = false;
   var gameNotStarted = true;
   var isMergeConflict = false;
   var mergeConflictShown = false;
   var lastBugSpawn = 0;
+  var antiGravityEnabled = false;
 
   var game = new Phaser.Game(config);
 
@@ -77,12 +78,14 @@
     this.load.image("architectPowerup", "assets/architect_powerup.png");
     this.load.image("architectIcon", "assets/architect_icon.png");
     this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
+    //TODO: RENAME ALL DATA BOMB REFERENCES TO ANTIGRAVITY AND CREATE NEW SPRITES
     this.load.image("dataBomb", "assets/sql.png");
     this.load.image("sqlIcon", "assets/sql_icon.png");
     this.load.image("sqlIcon_grey", "assets/sql_icon_grey.png");
     this.load.image("switch_red", "assets/switch_red.png");
     this.load.image("switch_green", "assets/switch_green.png");
     this.load.image("barrier", "assets/platform_barrier.png");
+    this.load.image("left_barrier", "assets/left_barrier.png");
 
     this.load.spritesheet("bomb_sprite", "assets/bomb_sprite.png", {
       frameWidth: 15,
@@ -159,9 +162,11 @@ function squashBugs(player, bug) {
           break;
 
         case 5:
-          rocket.setGravityY(-400);
-          greenSwitch.visible = true;
-          endRoundFive.visible = true;
+          if(bugCount == 0) {
+            rocket.setGravityY(-400);
+            greenSwitch.visible = true;
+            endRoundFive.visible = true;
+          }
           break;
       }
     }
@@ -235,6 +240,10 @@ function hitBomb(player, bomb) {
     player.anims.play("turn");
 
     gameOver = true;
+}
+
+function disableBugs(bug, leftBarrier) {
+  bug.disableBody(true, true);
 }
   
 function launchRocket() {

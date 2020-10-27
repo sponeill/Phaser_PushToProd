@@ -108,8 +108,8 @@ function explodeBug(child) {
     });
   }
 
-// Data Bomb
- function dropDataBomb() {
+// Anti-Gravity
+ function dropAntiGravity() {
     var powerUp = dataBombs.create(
       Phaser.Math.Between(0, 800),
       0,
@@ -125,16 +125,20 @@ function explodeBug(child) {
     }, 7500);
 }
 
-function addDataBomb(player, dataBomb) {
-    hasDataBomb = true;
+function addAntiGravity(player, dataBomb) {
+    hasAntiGravity = true;
     dataBomb.disableBody(true, true);
-    numberOfDataBombs++;
+    numberOfAntiGravityPowerups++;
     sqlIcon.setTexture('sqlIcon');
   }
   
- function useDataBomb() {
-    hasDataBomb = false;
-    sqlIcon.setTexture('sqlIcon_grey');
+ function useAntiGravity() {
 
-    //TODO: POWER EFFECT - LARGE EXPLOSION WIPES ENTIRE BOARD
+    antiGravityEnabled = true;
+
+    setTimeout(function() {
+        hasDataBomb = false;
+        sqlIcon.setTexture('sqlIcon_grey');
+        antiGravityEnabled = false;
+    }, 10000);
   }

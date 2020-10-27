@@ -116,6 +116,12 @@ function roundFive(player, bug) {
   console.log("Start Round 5");
   isMergeConflict = false;
 
+  conflicts.children.iterate(function (child) {
+    child.disableBody(true, true);
+    child.visible = true;
+    child.angle = child.angle + Phaser.Math.Between(15, 45);
+  });
+
   intermissionTimer();
 
   gameTimerText.visible = false;
@@ -144,7 +150,7 @@ function spawnBug() {
   var coordinates = [
     [825, 115],
     [825, 290],
-    [825, 475]
+    [825, 465]
   ];
 
   var item = coordinates[Phaser.Math.Between(0, 2)];
