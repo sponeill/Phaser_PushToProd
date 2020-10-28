@@ -153,9 +153,10 @@ function squashBugs(player, bug) {
       bug.disableBody(true, true);
     }
 
-    bugCount -= 1;
+  bugCount -= 1;
+  formatRemainingBugs(bugCount);
 
-    if (bugs.countActive(true) === 0) {
+    if (bugs.countActive(true) <= 0) {
       switch (round) {
         case 1:
           roundComplete = true;
@@ -256,11 +257,11 @@ function hitBomb(player, bomb) {
 function hitFeature(player, feature) {
   console.log("Hit Feature");
   feature.disableBody(true, true);
-  bugCount += 3;
+  bugCount += 2;
 }
 
-function disableBugs(bug, leftBarrier) {
-  bug.disableBody(true, true);
+function disableItem(item, leftBarrier) {
+  item.disableBody(true, true);
 }
   
 function launchRocket() {

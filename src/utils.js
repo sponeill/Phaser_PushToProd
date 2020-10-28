@@ -7,7 +7,11 @@ function formatTime(seconds) {
     partInSeconds = partInSeconds.toString().padStart(2, "0");
     // Returns formated time
     return `${minutes}:${partInSeconds}`;
-  }
+}
+  
+function formatRemainingBugs(bugCount) {
+  return `Bugs Remaining: ${bugCount}`;
+}
 
   function incrementGameTimer() {
     if (gameTimerText.visible === true) {

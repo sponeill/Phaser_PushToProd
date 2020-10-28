@@ -386,7 +386,8 @@ function create() {
   this.physics.add.collider(player, hackers);
   this.physics.add.collider(player, bombs, hitBomb, null, this);
   this.physics.add.collider(player, features, hitFeature, null, this);
-  this.physics.add.collider(bugs, offScreenBarriers, disableBugs, null, this);
+  this.physics.add.collider(bugs, offScreenBarriers, disableItem, null, this);
+  this.physics.add.collider(features, offScreenBarriers, disableItem, null, this);
   this.physics.add.collider(architectPlatform, platformBarriers);
   this.physics.add.collider(architect, architectPlatform);
   this.physics.add.collider(architect, platformBarriers);
@@ -404,6 +405,13 @@ function create() {
     fill: "#FFFFFF",
   });
   roundText.visible = false;
+
+  //Final Round Count
+  finalRoundCount = this.add.text(560, 36, [formatRemainingBugs(bugCount)], {
+    fontSize: "20px",
+    fill: "#FFFFFF",
+  });
+  finalRoundCount.visible = false;
 
   //Start Round One Text
   startRoundOne = this.add.text(15, 615, [

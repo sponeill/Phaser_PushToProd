@@ -137,6 +137,7 @@ function roundFive(player, bug) {
       bugCount = 12;
       round = 5;
       roundText.setText("Round: " + round);
+      finalRoundCount.visible = true;
 
       gameTimerText.visible = true;
       roundText.visible = true;
