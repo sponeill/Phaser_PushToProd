@@ -25,7 +25,7 @@ function dropArchitectPowerup() {
   
 function revealArchitect() {
 
-    if (hasArchitect) {
+    if (hasArchitect && round != 5) {
       hasArchitect = false;
       summonArchitectText.visible = true;
       architectIcon.setTexture('architectIcon_grey');
@@ -40,6 +40,8 @@ function revealArchitect() {
         console.log("Begin architect effect");
         architectEffect();
       }, 2500);
+    } else if (round === 5) {
+        //TODO: SHOW TEXT "YOUR ARCHITECT IS BUSY. Have you tried Stack Overflow?"
     }
   }
 
@@ -47,6 +49,9 @@ function dismissArchitect() {
     summonArchitectText.visible = false;
     architectPlatform.setGravityY(-500);
     architect.anims.play("architect_action", false);
+    setTimeout(function () {
+        squashBugs();
+      }, 1000);
 }
   
 function architectEffect() {

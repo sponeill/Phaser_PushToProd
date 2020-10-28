@@ -144,6 +144,7 @@ function roundFive(player, bug) {
   }
 }
 
+//TODO: REFACTOR
 function spawnBug() {
 
   var rightCoordinates = [
@@ -158,9 +159,15 @@ function spawnBug() {
     [25, 435]
   ];
 
-  var result = Math.random() >= 0.50;
+  var featureCoordinates = [
+    [25, 145],
+    [25, 300],
+    [25, 480]
+  ];
 
-  if(result) {
+  var result = Math.random();
+
+  if(result >= .21 && result <= .60) {
 
     var item = rightCoordinates[Phaser.Math.Between(0, 2)];
 
@@ -173,7 +180,7 @@ function spawnBug() {
     bug.setGravityY(-300);
   
     lastBugSpawn = gameTimer;
-  } else {
+  } else if(result >= .61 && result <= 1) {
 
     var item = leftCoordinates[Phaser.Math.Between(0, 2)];
 
@@ -187,6 +194,19 @@ function spawnBug() {
   
     lastBugSpawn = gameTimer;
   }
+   else if(result <= .20) {
+    var item = featureCoordinates[Phaser.Math.Between(0, 2)];
+
+    var feature = features.create(item[0], item[1], "feature");
+    feature.anims.play("feature", true);
+    feature.enableBody(true, item[0], item[1], true, true);
+    feature.setBounce(1);
+    feature.setCollideWorldBounds(false);
+    feature.setVelocityX(Phaser.Math.Between(450, 300));
+    feature.setGravityY(-300);
+
+    lastBugSpawn = gameTimer;
+   }
 };
 
 

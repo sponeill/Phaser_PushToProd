@@ -71,6 +71,7 @@
     this.load.image("ground", "assets/platform.png");
     //this.load.image("bug", "assets/bug_sprites.png");
     this.load.image("bomb", "assets/bomb_new.png");
+    this.load.image("feature", "assets/feature_bomb.png");
     this.load.image("door", "assets/door.png");
     this.load.image("firewallPowerup", "assets/firewall.png");
     this.load.image("firewallIcon", "assets/firewall_icon.png");
@@ -148,7 +149,9 @@
 function squashBugs(player, bug) {
     console.log("Squashed Bug");
 
-    bug.disableBody(true, true);
+    if(bug != null) {
+      bug.disableBody(true, true);
+    }
 
     bugCount -= 1;
 
@@ -170,7 +173,7 @@ function squashBugs(player, bug) {
           break;
 
         case 5:
-          if(bugCount == 0) {
+          if(bugCount <= 0) {
             rocket.setGravityY(-400);
             greenSwitch.visible = true;
             endRoundFive.visible = true;
@@ -248,6 +251,12 @@ function hitBomb(player, bomb) {
     player.anims.play("turn");
 
     gameOver = true;
+}
+
+function hitFeature(player, feature) {
+  console.log("Hit Feature");
+  feature.disableBody(true, true);
+  bugCount += 3;
 }
 
 function disableBugs(bug, leftBarrier) {
