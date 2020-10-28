@@ -9,7 +9,7 @@ function roundOne() {
   roundText.visible = true;
 
   bugs.children.iterate(function (child) {
-    child.anims.play("bug", true);
+    randomLeftRightBug(child);
     child.enableBody(true, child.x, 0, true, true);
     child.setGravityY(0);
   });
@@ -39,7 +39,7 @@ function roundTwo(player, bug) {
       roundText.visible = true;
 
       bugs.children.iterate(function (child) {
-        child.anims.play("bug", true);
+        randomLeftRightBug(child);
         child.enableBody(true, child.x, 0, true, true);
         child.setBounceY(Phaser.Math.FloatBetween(0.9, 1));
         child.setGravityY(0);
@@ -101,7 +101,7 @@ function roundFour(player, bug) {
       roundText.visible = true;
 
       bugs.children.iterate(function (child) {
-        child.anims.play("bug", true);
+        randomLeftRightBug(child);
         child.enableBody(true, child.x, 0, true, true);
         child.setBounce(1);
         child.setCollideWorldBounds(true);
@@ -146,21 +146,56 @@ function roundFive(player, bug) {
 
 function spawnBug() {
 
-  var coordinates = [
+  var rightCoordinates = [
     [825, 115],
     [825, 290],
     [825, 465]
   ];
 
-  var item = coordinates[Phaser.Math.Between(0, 2)];
+  var leftCoordinates = [
+    [25, 105],
+    [25, 280],
+    [25, 455]
+  ];
 
-  var bug = bugs.create(item[0], item[1], "bug");
-  bug.anims.play("bug", true);
-  bug.enableBody(true, item[0], item[1], true, true);
-  bug.setBounce(1);
-  bug.setCollideWorldBounds(false);
-  bug.setVelocityX(Phaser.Math.Between(-450, -300));
-  bug.setGravityY(-300);
+  var result = Math.random() >= 0.50;
 
-  lastBugSpawn = gameTimer;
+  if(result) {
+
+    var item = rightCoordinates[Phaser.Math.Between(0, 2)];
+
+    var bug = bugs.create(item[0], item[1], "bug_left");
+    bug.anims.play("bug_left", true);
+    bug.enableBody(true, item[0], item[1], true, true);
+    bug.setBounce(1);
+    bug.setCollideWorldBounds(false);
+    bug.setVelocityX(Phaser.Math.Between(-450, -300));
+    bug.setGravityY(-300);
+  
+    lastBugSpawn = gameTimer;
+  } else {
+
+    var item = leftCoordinates[Phaser.Math.Between(0, 2)];
+
+    var bug = bugs.create(item[0], item[1], "bug_right");
+    bug.anims.play("bug_right", true);
+    bug.enableBody(true, item[0], item[1], true, true);
+    bug.setBounce(1);
+    bug.setCollideWorldBounds(false);
+    bug.setVelocityX(Phaser.Math.Between(450, 300));
+    bug.setGravityY(-300);
+  
+    lastBugSpawn = gameTimer;
+  }
 };
+
+
+function randomLeftRightBug(bug) {
+  var result = Math.random() >= 0.50;
+
+  if(result) {
+    bug.anims.play("bug_right", true);
+  } else {
+    bug.anims.play("bug_left", true);
+  }
+}

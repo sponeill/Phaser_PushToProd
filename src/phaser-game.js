@@ -69,7 +69,7 @@
     this.load.image("platform_small", "assets/platform_small.png");
     this.load.image("rocket_platform", "assets/rocket_platform.png");
     this.load.image("ground", "assets/platform.png");
-    this.load.image("bug", "assets/bug.png");
+    //this.load.image("bug", "assets/bug_sprites.png");
     this.load.image("bomb", "assets/bomb_new.png");
     this.load.image("door", "assets/door.png");
     this.load.image("firewallPowerup", "assets/firewall.png");
@@ -87,6 +87,14 @@
     this.load.image("barrier", "assets/platform_barrier.png");
     this.load.image("left_barrier", "assets/left_barrier.png");
 
+    this.load.spritesheet("bug_right", "assets/bug_sprites_right.png", {
+      frameWidth: 30,
+      frameHeight: 24,
+    });
+    this.load.spritesheet("bug_left", "assets/bug_sprites_left.png", {
+      frameWidth: 30,
+      frameHeight: 24,
+    });
     this.load.spritesheet("bomb_sprite", "assets/bomb_sprite.png", {
       frameWidth: 15,
       frameHeight: 15,

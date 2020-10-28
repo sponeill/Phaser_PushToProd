@@ -154,9 +154,10 @@ function create() {
     platformBarriers.create(398, 140, "barrier", null, false, true);
     platformBarriers.create(398, -120, "barrier", null, false, true);
 
-    //Off-Screen Left Barrier
-    leftBarriers = this.physics.add.staticGroup();
-    leftBarriers.create(-25,350, "left_barrier", null, true, true);
+    //Off-Screen Barriers
+    offScreenBarriers = this.physics.add.staticGroup();
+    offScreenBarriers.create(-75,350, "left_barrier", null, true, true);
+    offScreenBarriers.create(875,350, "left_barrier", null, true, true);
 
     //Player
     player = this.physics.add.sprite(100, 510, "jepack_dude");
@@ -304,10 +305,30 @@ function create() {
       repeat: -1,
     });
 
+    // this.anims.create({
+    //   key: "bug",
+    //   frames: [{ key: "bug", frame: 0 }],
+    //   frameRate: 20,
+    // });
+
     this.anims.create({
-      key: "bug",
-      frames: [{ key: "bug", frame: 0 }],
-      frameRate: 20,
+      key: "bug_right",
+      frames: this.anims.generateFrameNumbers("bug_right", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "bug_left",
+      frames: this.anims.generateFrameNumbers("bug_left", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 30,
+      repeat: -1,
     });
 
     //Enable Keyboard Inputs
@@ -315,7 +336,7 @@ function create() {
 
     //Bugs
     bugs = this.physics.add.group({
-      key: "bug",
+      key: "bug_right",
       //Will create 12 bugs total, 1 original and 12 children
       repeat: 11,
       //Placement of generated bugs
@@ -323,6 +344,7 @@ function create() {
     });
 
     bugs.children.iterate(function (child) {
+      child.anims.play("bug_right", true);
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
       //Gravity can be overridden on a body from the value set in the config above
       child.setGravityY(400);
@@ -359,7 +381,7 @@ function create() {
     this.physics.add.collider(antiGravityPowerups, platforms);
     this.physics.add.collider(player, hackers);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
-    this.physics.add.collider(bugs, leftBarriers, disableBugs, null, this);
+    this.physics.add.collider(bugs, offScreenBarriers, disableBugs, null, this);
     this.physics.add.collider(architectPlatform, platformBarriers);
     this.physics.add.collider(architect, architectPlatform);
     this.physics.add.collider(architect, platformBarriers);
