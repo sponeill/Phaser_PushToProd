@@ -102,7 +102,7 @@ function update() {
   }
 
   //Round Five Enemies
-  if (round === 5 && bugCount > 0 && gameTimer - lastBugSpawn >= 2) {
+  if (round === 5 && bugCount > 0 && gameTimer - lastBugSpawn >= 1) {
     spawnBug();
   }
 }

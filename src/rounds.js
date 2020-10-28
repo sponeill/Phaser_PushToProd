@@ -153,9 +153,9 @@ function spawnBug() {
   ];
 
   var leftCoordinates = [
-    [25, 105],
-    [25, 280],
-    [25, 455]
+    [25, 90],
+    [25, 260],
+    [25, 435]
   ];
 
   var result = Math.random() >= 0.50;
