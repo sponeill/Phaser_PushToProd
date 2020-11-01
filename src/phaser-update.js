@@ -96,8 +96,9 @@ function update() {
 
     conflicts.children.iterate(function (child) {
       child.enableBody(true);
+      child.setTint(0xF08383);
       child.visible = true;
-      child.angle = child.angle + Phaser.Math.Between(15, 45);
+      child.angle = child.angle + 40;
     });
   }
 

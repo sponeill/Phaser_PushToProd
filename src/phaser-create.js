@@ -4,9 +4,10 @@ function create() {
   //Merge Conflicts
   conflicts = this.physics.add.staticGroup();
   conflicts.create(400, 300, "background_conflict", null, false, true);
-  conflicts.create(250, 175, "ground", null, false, true);
-  conflicts.create(750, 375, "ground", null, false, true);
-  conflicts.create(50, 675, "platform_small", null, false, true);
+  conflicts.create(700, 375, "ground");
+  conflicts.create(100, 375, "ground");
+  conflicts.create(850, 220, "ground");
+  conflicts.create(-50, 220, "ground");
   conflicts.children.iterate(function (child) {
     child.disableBody(true);
   })

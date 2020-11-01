@@ -210,7 +210,6 @@ function spawnBug() {
    }
 };
 
-
 function randomLeftRightBug(bug) {
   var result = Math.random() >= 0.50;
 
@@ -219,4 +218,10 @@ function randomLeftRightBug(bug) {
   } else {
     bug.anims.play("bug_left", true);
   }
+}
+
+function fixMergeConflict() {
+  conflicts.children.iterate(function (child) {
+    child.angle = child.angle - 10;
+  });
 }
