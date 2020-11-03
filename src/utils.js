@@ -9,11 +9,7 @@ function formatTime(seconds) {
     return `${minutes}:${partInSeconds}`;
 }
   
-function formatRemainingBugs(bugCount) {
-  return `Bugs Remaining: ${bugCount}`;
-}
-
-  function incrementGameTimer() {
+function incrementGameTimer() {
     if (gameTimerText.visible === true) {
       gameTimer += 1; // One second
       gameTimerText.setText(formatTime(gameTimer));

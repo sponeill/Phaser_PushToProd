@@ -408,7 +408,7 @@ function create() {
   roundText.visible = false;
 
   //Final Round Count
-  finalRoundCount = this.add.text(560, 36, [formatRemainingBugs(bugCount)], {
+  finalRoundCount = this.add.text(560, 36, "Bugs Remaining: 12", {
     fontSize: "20px",
     fill: "#FFFFFF",
   });

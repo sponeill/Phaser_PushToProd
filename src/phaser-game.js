@@ -55,6 +55,7 @@
   var mergeConflictShown = false;
   var lastBugSpawn = 0;
   var antiGravityEnabled = false;
+  var isEndGame = false;
 
   var game = new Phaser.Game(config);
 
@@ -154,9 +155,23 @@ function squashBugs(player, bug) {
     }
 
   bugCount -= 1;
-  formatRemainingBugs(bugCount);
 
-    if (bugs.countActive(true) <= 0) {
+  if (round === 5) {
+    finalRoundCount.setText("Bugs Remaining: " + bugCount)
+    finalRoundCount.visible = true;
+  }
+
+  if (bugCount <= 0) {
+    bugs.children.iterate(function (child) {
+      disableItem(child);
+    })
+
+    if (round === 5) {
+      isEndGame = true;
+    }
+  }
+
+  if (bugs.countActive(true) <= 0) {
       switch (round) {
         case 1:
           roundComplete = true;
@@ -255,12 +270,13 @@ function hitBomb(player, bomb) {
 }
 
 function hitFeature(player, feature) {
-  console.log("Hit Feature");
   feature.disableBody(true, true);
   bugCount += 2;
+  finalRoundCount.setText("Bugs Remaining: " + bugCount)
+  finalRoundCount.visible = true;
 }
 
-function disableItem(item, leftBarrier) {
+function disableItem(item) {
   item.disableBody(true, true);
 }
   
