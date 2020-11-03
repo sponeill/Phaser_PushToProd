@@ -81,9 +81,17 @@ function explodeBug(child) {
 //Firewall
   function enableFirewall(player, powerup) {
     powerup.disableBody(true, true);
-    hasFirewall = true;
-    enableFirewallText.visible = true;
-    firewallIcon.setTexture('firewallIcon');
+
+    fireWallCount++;
+
+    if (fireWallCount === 1) {
+       dropPowerUp();
+       firewallIcon.setTexture('firewallIcon_half');
+    } else if (fireWallCount === 2) {
+      hasFirewall = true;
+      enableFirewallText.visible = true;
+      firewallIcon.setTexture('firewallIcon');
+    }
   }
 
   function activateFirewall() {

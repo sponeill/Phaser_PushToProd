@@ -42,6 +42,7 @@
   var firewallPowerups;
   var architectPowerups;
   var firewallUp = false;
+  var fireWallCount = 0;
   var allowBombs = false;
   var rocketCollider;
   var preLaunchComplete = false;
@@ -56,6 +57,9 @@
   var lastBugSpawn = 0;
   var antiGravityEnabled = false;
   var isEndGame = false;
+var conflictsResolved = 4;
+var roundFiveStarted = false;
+  
 
   var game = new Phaser.Game(config);
 
@@ -77,6 +81,7 @@
     this.load.image("firewallPowerup", "assets/firewall.png");
     this.load.image("firewallIcon", "assets/firewall_icon.png");
     this.load.image("firewallIcon_grey", "assets/firewall_icon_grey.png");
+    this.load.image("firewallIcon_half", "assets/firewall_icon_half.png");
     this.load.image("architectPowerup", "assets/architect_powerup.png");
     this.load.image("architectIcon", "assets/architect_icon.png");
     this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
@@ -242,8 +247,9 @@ function squashBugs(player, bug) {
     });
 
     dropPowerUp();
+}
 
-    function dropPowerUp(x, y) {
+function dropPowerUp() {
       setTimeout(function () {
         var powerUp = firewallPowerups.create(
           Phaser.Math.Between(0, 800),
@@ -255,8 +261,7 @@ function squashBugs(player, bug) {
         powerUp.setCollideWorldBounds(true);
         powerUp.setVelocity(Phaser.Math.Between(-200, 200), 20);
       }, 2000);
-    }
-  }
+}
 
 function hitBomb(player, bomb) {
     console.log("Hit Bomb");

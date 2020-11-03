@@ -100,20 +100,26 @@ function roundFour(player, bug) {
       gameTimerText.visible = true;
       roundText.visible = true;
 
-      bugs.children.iterate(function (child) {
-        randomLeftRightBug(child);
-        child.enableBody(true, child.x, 0, true, true);
-        child.setBounce(1);
-        child.setCollideWorldBounds(true);
-        child.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        child.setGravityY(0);
-      });
+        var codeBlockLocations = [
+             [80, 150],
+             [640, 310],
+             [240, 310],
+             [150, 510],
+             [625, 510],
+             [700, 175],
+          ];
+      
+      for (var i = 0; i < 4; i++) {
+        var item = Phaser.Utils.Array.RemoveRandomElement(codeBlockLocations);
+        spawnCodeBlock(item)
+      }
     }, 10500);
   }
 }
 
 function roundFive(player, bug) {
   console.log("Start Round 5");
+  roundFiveStarted = true;
   isMergeConflict = false;
 
   conflicts.children.iterate(function (child) {
@@ -220,13 +226,18 @@ function randomLeftRightBug(bug) {
   }
 }
 
-function spawnCodeBlock() {
-   var codeBlock = codeBlocks.create(350, 250, "code_block");
+function spawnCodeBlock(location) {
+  console.log("Spawn Code Block");
+   var codeBlock = codeBlocks.create(location[0], location[1], "code_block");
       codeBlock.setCollideWorldBounds(true);
 }
 
-function fixMergeConflict() {
+function fixMergeConflict(player, codeBlock) {
+  codeBlock.disableBody(true, true);
+  
   conflicts.children.iterate(function (child) {
     child.angle = child.angle - 10;
   });
+
+  conflictsResolved--;
 }
