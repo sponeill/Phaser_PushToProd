@@ -220,6 +220,11 @@ function randomLeftRightBug(bug) {
   }
 }
 
+function spawnCodeBlock() {
+   var codeBlock = codeBlocks.create(350, 250, "code_block");
+      codeBlock.setCollideWorldBounds(true);
+}
+
 function fixMergeConflict() {
   conflicts.children.iterate(function (child) {
     child.angle = child.angle - 10;

@@ -88,6 +88,7 @@
     this.load.image("switch_green", "assets/switch_green.png");
     this.load.image("barrier", "assets/platform_barrier.png");
     this.load.image("left_barrier", "assets/left_barrier.png");
+    this.load.image("code_block", "assets/code_block.png");
 
     this.load.spritesheet("bug_right", "assets/bug_sprites_right.png", {
       frameWidth: 30,

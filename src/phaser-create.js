@@ -356,6 +356,9 @@ function create() {
   //Bombs
   bombs = this.physics.add.group();
 
+  //Code Blocks
+  codeBlocks = this.physics.add.group();
+
   //Features
   features = this.physics.add.group();
 
@@ -393,6 +396,8 @@ function create() {
   this.physics.add.collider(architect, architectPlatform);
   this.physics.add.collider(architect, platformBarriers);
   this.physics.add.collider(bugs, bugs);
+  this.physics.add.collider(codeBlocks, platforms);
+  this.physics.add.collider(player, codeBlocks);
 
   //Overlaps Events
   this.physics.add.overlap(player, bugs, squashBugs, null, this);
