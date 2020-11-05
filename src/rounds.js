@@ -233,7 +233,10 @@ function spawnCodeBlock(location) {
 }
 
 function fixMergeConflict(player, codeBlock) {
-  codeBlock.disableBody(true, true);
+  codeBlock.anims.play("code_block_fade", true);
+  setTimeout(function() {
+    codeBlock.disableBody(true, true);
+  }, 750)
   
   conflicts.children.iterate(function (child) {
     child.angle = child.angle - 10;

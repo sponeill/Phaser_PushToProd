@@ -326,6 +326,15 @@ function create() {
     repeat: -1,
   });
 
+  this.anims.create({
+    key: "code_block_fade",
+    frames: this.anims.generateFrameNumbers("code_block_animation", {
+      start: 0,
+      end: 14,
+    }),
+    duration: 600,
+  });
+
   //Enable Keyboard Inputs
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -397,13 +406,14 @@ function create() {
   this.physics.add.collider(architect, platformBarriers);
   this.physics.add.collider(bugs, bugs);
   this.physics.add.collider(codeBlocks, platforms);
+  this.physics.add.collider(player, codeBlocks);
 
   //Overlaps Events
   this.physics.add.overlap(player, bugs, squashBugs, null, this);
   this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
   this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
   this.physics.add.overlap(player, antiGravityPowerups, addAntiGravity, null, this);
-  this.physics.add.overlap(codeBlocks, player, fixMergeConflict, null, this);
+  this.physics.add.overlap(rocketPlatform, codeBlocks, fixMergeConflict, null, this);
 
   //Round
   roundText = this.add.text(675, 16, "Round: 1", {
