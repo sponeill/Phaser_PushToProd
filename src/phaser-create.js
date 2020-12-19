@@ -74,7 +74,7 @@ function create() {
   architectIcon.setGravityY(-300);
   architectIcon.visible = true;
 
-  sqlIcon = this.physics.add.sprite(80, 30, "sqlIcon_grey");
+  sqlIcon = this.physics.add.sprite(80, 30, "jetpackIcon_grey");
   sqlIcon.setGravityY(-300);
   sqlIcon.visible = true;
 
@@ -111,6 +111,11 @@ function create() {
   //Architect Platform
   architectPlatform = this.physics.add.sprite(400, -25, "platform_small");
   architectPlatform.setGravityY(-300);
+
+  //Busy Architect
+  busyArchitect = this.physics.add.sprite(460, 35, "im_busy");
+  busyArchitect.setGravityY(-300);
+  busyArchitect.visible  = false;
 
   //Rocket Platform
   rocketPlatform = this.physics.add.staticGroup();

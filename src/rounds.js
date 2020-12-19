@@ -140,7 +140,7 @@ function roundFive(player, bug) {
     setTimeout(function () {
       endRoundFour.visible = false;
       consoleDefaultText.visible = true;
-      bugCount = 12;
+      bugCount = 6;
       round = 5;
       roundText.setText("Round: " + round);
       finalRoundCount.visible = true;

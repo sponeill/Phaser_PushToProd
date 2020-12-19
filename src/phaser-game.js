@@ -86,14 +86,17 @@ function preload() {
   this.load.image("architectIcon", "assets/architect_icon.png");
   this.load.image("architectIcon_grey", "assets/architect_icon_grey.png");
   //TODO: CREATE NEW SPRITES
-  this.load.image("antiGravityPowerup", "assets/sql.png");
+  this.load.image("antiGravityPowerup", "assets/jetpack.png");
   this.load.image("sqlIcon", "assets/sql_icon.png");
   this.load.image("sqlIcon_grey", "assets/sql_icon_grey.png");
+  this.load.image("jetpackIcon", "assets/jetpack_icon.png");
+  this.load.image("jetpackIcon_grey", "assets/jetpack_icon_grey.png");
   this.load.image("switch_red", "assets/switch_red.png");
   this.load.image("switch_green", "assets/switch_green.png");
   this.load.image("barrier", "assets/platform_barrier.png");
   this.load.image("left_barrier", "assets/left_barrier.png");
   this.load.image("code_block", "assets/code_block.png");
+  this.load.image("im_busy", "assets/im_busy.png");
 
   this.load.spritesheet("bug_right", "assets/bug_sprites_right.png", {
     frameWidth: 30,

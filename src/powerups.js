@@ -25,23 +25,36 @@ function dropArchitectPowerup() {
   
 function revealArchitect() {
 
-    if (hasArchitect && round != 5) {
+    if (hasArchitect) {
       hasArchitect = false;
       summonArchitectText.visible = true;
       architectIcon.setTexture('architectIcon_grey');
       architectPlatform.setGravityY(-150);
       architect.setGravityY(-150);
 
-      setTimeout(function () {
-        architect.anims.play("architect_action", true);
-      }, 1500);
+      if(round != 3 && round != 5)
+      {
+        setTimeout(function () {
+          architect.anims.play("architect_action", true);
+        }, 1500);
+  
+        setTimeout(function () {
+          console.log("Begin architect effect");
+          architectEffect();
+        }, 2500);
+      } else {
+        
+        setTimeout(function () {
+          busyArchitect.visible  = true;
+        }, 1500);
 
-      setTimeout(function () {
-        console.log("Begin architect effect");
-        architectEffect();
-      }, 2500);
-    } else if (round === 5) {
-        //TODO: SHOW TEXT "YOUR ARCHITECT IS BUSY. Have you tried Stack Overflow?"
+        setTimeout(function () {
+          busyArchitect.visible  = false;
+          summonArchitectText.visible = false;
+          architectPlatform.setGravityY(-500);
+        }, 4500);
+      }
+
     }
   }
 
@@ -143,7 +156,7 @@ function addAntiGravity(player, antiGravityPowerup) {
     hasAntiGravity = true;
     antiGravityPowerup.disableBody(true, true);
     numberOfAntiGravityPowerups++;
-    sqlIcon.setTexture('sqlIcon');
+    sqlIcon.setTexture('jetpackIcon');
 }
   
 function useAntiGravity() {
@@ -152,7 +165,7 @@ function useAntiGravity() {
 
     setTimeout(function() {
         hasAntiGravity = false;
-        sqlIcon.setTexture('sqlIcon_grey');
+        sqlIcon.setTexture('jetpackIcon_grey');
         antiGravityEnabled = false;
     }, 10000);
 }
