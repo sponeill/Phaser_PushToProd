@@ -37,6 +37,7 @@ var gameTimerEvent;
 var roundComplete = false;
 var hackers;
 var platformBarriers;
+var codeBlockBarriers;
 var lastBombRelease = 0;
 var bombCount = 0;
 var firewallPowerups;
@@ -95,7 +96,8 @@ function preload() {
   this.load.image("switch_green", "assets/switch_green.png");
   this.load.image("barrier", "assets/platform_barrier.png");
   this.load.image("left_barrier", "assets/left_barrier.png");
-  this.load.image("code_block", "assets/code_block.png");
+  this.load.image("code_block_barrier", "assets/code_block_barrier.png");
+  this.load.image("code_block", "assets/resized_code_block_breakable.png");
   this.load.image("im_busy", "assets/im_busy.png");
 
   this.load.spritesheet("bug_right", "assets/bug_sprites_right.png", {
@@ -157,6 +159,10 @@ function preload() {
   this.load.spritesheet("code_block_animation", "assets/code_block_animation.png", {
     frameWidth: 35,
     frameHeight: 35,
+  });
+  this.load.spritesheet("brick_break", "assets/resized_BrickBreak.png", {
+    frameWidth: 40,
+    frameHeight: 40,
   });
 }
 
@@ -317,4 +323,9 @@ function rocketPreLaunch(rocket, platformBarriers) {
     endRoundFive.visible = false;
     launchText.visible = true;
   }, 5000);
+}
+
+function bounceOffCodeBlock(codeBlock, barrier){
+  codeBlock.setGravityY(-100);
+  codeBlock.setVelocity(0, -200);
 }

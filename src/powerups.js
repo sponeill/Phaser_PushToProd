@@ -32,7 +32,7 @@ function revealArchitect() {
       architectPlatform.setGravityY(-150);
       architect.setGravityY(-150);
 
-      if(round != 3 && round != 5)
+      if(round != 3 && round != 4 && round != 5)
       {
         setTimeout(function () {
           architect.anims.play("architect_action", true);

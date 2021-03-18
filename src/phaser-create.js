@@ -160,6 +160,10 @@ function create() {
   platformBarriers.create(398, 140, "barrier", null, false, true);
   platformBarriers.create(398, -120, "barrier", null, false, true);
 
+  //CodeBlock Barries
+  codeBlockBarriers = this.physics.add.staticGroup();
+  codeBlockBarriers.create(405, 180, "code_block_barrier", null, false, true);
+
   //Off-Screen Barriers
   offScreenBarriers = this.physics.add.staticGroup();
   offScreenBarriers.create(-75, 350, "left_barrier", null, true, true);
@@ -332,10 +336,10 @@ function create() {
   });
 
   this.anims.create({
-    key: "code_block_fade",
-    frames: this.anims.generateFrameNumbers("code_block_animation", {
+    key: "brick_break",
+    frames: this.anims.generateFrameNumbers("brick_break", {
       start: 0,
-      end: 14,
+      end: 7,
     }),
     duration: 600,
   });
@@ -389,6 +393,7 @@ function create() {
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(hackers, platforms);
   this.physics.add.collider(hackers, platformBarriers);
+  this.physics.add.collider(codeBlocks, codeBlockBarriers, bounceOffCodeBlock, null, this);
   rocketCollider = this.physics.add.collider(
     rocket,
     platformBarriers,
@@ -410,18 +415,16 @@ function create() {
   this.physics.add.collider(architect, architectPlatform);
   this.physics.add.collider(architect, platformBarriers);
   this.physics.add.collider(bugs, bugs);
-  this.physics.add.collider(codeBlocks, platforms);
-  this.physics.add.collider(player, codeBlocks);
+  this.physics.add.collider(player, codeBlocks, breakCodeBlock, null, this);
 
   //Overlaps Events
   this.physics.add.overlap(player, bugs, squashBugs, null, this);
   this.physics.add.overlap(player, firewallPowerups, enableFirewall, null, this);
   this.physics.add.overlap(player, architectPowerups, addArchitectPowerup, null, this);
   this.physics.add.overlap(player, antiGravityPowerups, addAntiGravity, null, this);
-  this.physics.add.overlap(rocketPlatform, codeBlocks, fixMergeConflict, null, this);
 
   //Round
-  roundText = this.add.text(675, 16, "Round: 1", {
+  roundText = this.add.text(675, 16, "Sprint: 1", {
     fontSize: "20px",
     fill: "#FFFFFF",
   });

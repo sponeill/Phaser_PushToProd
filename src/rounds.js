@@ -1,10 +1,11 @@
 function roundOne() {
+
   consoleText.visible = false;
   startRoundOne.visible = true;
   gameNotStarted = false;
   bugCount = 12;
   round = 1;
-  roundText.setText("Round: " + round);
+  roundText.setText("Sprint: " + round);
   gameTimerText.visible = true;
   roundText.visible = true;
 
@@ -16,7 +17,7 @@ function roundOne() {
 }
 
 function roundTwo(player, bug) {
-  console.log("Start Round 2");
+  console.log("Start Sprint 2");
   startRoundOne.visible = false;;
 
   intermissionTimer();
@@ -34,7 +35,7 @@ function roundTwo(player, bug) {
       consoleDefaultText.visible = true;
       bugCount = 12;
       round = 2;
-      roundText.setText("Round: " + round);
+      roundText.setText("Sprint: " + round);
       gameTimerText.visible = true;
       roundText.visible = true;
 
@@ -49,7 +50,7 @@ function roundTwo(player, bug) {
 }
 
 function roundThree(player, bug) {
-  console.log("Start Round 3");
+  console.log("Start Sprint 3");
 
   intermissionTimer();
 
@@ -66,7 +67,7 @@ function roundThree(player, bug) {
       consoleDefaultText.visible = true;
       bugCount = 12;
       round = 3;
-      roundText.setText("Round: " + round);
+      roundText.setText("Sprint: " + round);
 
       gameTimerText.visible = true;
       roundText.visible = true;
@@ -77,7 +78,7 @@ function roundThree(player, bug) {
 }
 
 function roundFour(player, bug) {
-  console.log("Start Round 4");
+  console.log("Start Sprint 4");
 
   intermissionTimer();
 
@@ -94,19 +95,17 @@ function roundFour(player, bug) {
       consoleDefaultText.visible = true;
       bugCount = 12;
       round = 4;
-      roundText.setText("Round: " + round);
+      roundText.setText("Sprint: " + round);
 
       isMergeConflict = true;
       gameTimerText.visible = true;
       roundText.visible = true;
 
         var codeBlockLocations = [
-             [80, 150],
-             [640, 310],
-             [240, 310],
-             [150, 510],
-             [625, 510],
-             [700, 175],
+             [250, 50],
+             [350, 125],
+             [450, 75],
+             [550, 150],
           ];
       
       for (var i = 0; i < 4; i++) {
@@ -118,7 +117,7 @@ function roundFour(player, bug) {
 }
 
 function roundFive(player, bug) {
-  console.log("Start Round 5");
+  console.log("Start Sprint 5");
   roundFiveStarted = true;
   isMergeConflict = false;
 
@@ -142,7 +141,7 @@ function roundFive(player, bug) {
       consoleDefaultText.visible = true;
       bugCount = 6;
       round = 5;
-      roundText.setText("Round: " + round);
+      roundText.setText("Sprint: " + round);
       finalRoundCount.visible = true;
 
       gameTimerText.visible = true;
@@ -229,18 +228,20 @@ function randomLeftRightBug(bug) {
 function spawnCodeBlock(location) {
   console.log("Spawn Code Block");
    var codeBlock = codeBlocks.create(location[0], location[1], "code_block");
-      codeBlock.setCollideWorldBounds(true);
+    codeBlock.setBounce(1);
+    codeBlock.setGravityY(-100);
+    codeBlock.setCollideWorldBounds(true);
+    codeBlock.setVelocity(0, 100);
 }
 
-function fixMergeConflict(player, codeBlock) {
-  codeBlock.anims.play("code_block_fade", true);
+function breakCodeBlock(player, codeBlock) {
+  codeBlock.anims.play("brick_break", true);
   setTimeout(function() {
     codeBlock.disableBody(true, true);
-  }, 750)
+    conflictsResolved--;
+  }, 100)
   
   conflicts.children.iterate(function (child) {
     child.angle = child.angle - 10;
   });
-
-  conflictsResolved--;
 }
