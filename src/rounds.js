@@ -1,20 +1,18 @@
 function roundOne() {
+  consoleText.visible = false;
+  startRoundOne.visible = true;
+  gameNotStarted = false;
+  bugCount = 12;
+  round = 1;
+  roundText.setText("Sprint: " + round);
+  gameTimerText.visible = true;
+  roundText.visible = true;
 
-  roundFour();
-  // consoleText.visible = false;
-  // startRoundOne.visible = true;
-  // gameNotStarted = false;
-  // bugCount = 12;
-  // round = 1;
-  // roundText.setText("Sprint: " + round);
-  // gameTimerText.visible = true;
-  // roundText.visible = true;
-
-  // bugs.children.iterate(function (child) {
-  //   randomLeftRightBug(child);
-  //   child.enableBody(true, child.x, 0, true, true);
-  //   child.setGravityY(0);
-  // });
+  bugs.children.iterate(function (child) {
+    randomLeftRightBug(child);
+    child.enableBody(true, child.x, 0, true, true);
+    child.setGravityY(0);
+  });
 }
 
 function roundTwo(player, bug) {
