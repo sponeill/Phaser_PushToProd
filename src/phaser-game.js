@@ -210,6 +210,7 @@ function squashBugs(player, bug) {
       case 5:
         if (bugCount <= 0) {
           rocket.setGravityY(-400);
+          endRoundFour.visible = false;
           greenSwitch.visible = true;
           endRoundFive.visible = true;
         }
@@ -301,8 +302,6 @@ function disableItem(item) {
 
 function launchRocket() {
   if (bugCount <= 0 && round === 5 && !launched && preLaunchComplete) {
-    //countDown = 3;
-
     setTimeout(function () {
       //this.cameras.main.shake(500);
       rocket.setVelocityY(-600);

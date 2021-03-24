@@ -129,6 +129,7 @@ function roundFive(player, bug) {
 
   gameTimerText.visible = false;
   roundText.visible = false;
+  consoleDefaultText.visible = false;
 
   endRoundFour.visible = true;
 
@@ -136,8 +137,6 @@ function roundFive(player, bug) {
 
   function beginNext() {
     setTimeout(function () {
-      endRoundFour.visible = false;
-      consoleDefaultText.visible = true;
       bugCount = 6;
       round = 5;
       roundText.setText("Sprint: " + round);

@@ -442,7 +442,7 @@ function create() {
 
   //Start Round One Text
   startRoundOne = this.add.text(15, 615, [
-    "Message: Go-Live Attempt Number: 17",
+    "Message: Go-Live Attempt Number: " + Math.floor(Math.random() * 1000),
     "         Please resolve all issues reported by the client immediately.",
     "",
     "Info:    Squashing bugs ...",
@@ -480,14 +480,14 @@ function create() {
     fontFamily: "Courier",
     align: "left",
     color: "red",
-    backgroundColor: "yellow",
+    backgroundColor: "yellow"
   });
   endRoundTwo.visible = false;
 
   //End Round Three Text
   endRoundThree = this.add.text(15, 615, [
     "Warning:   Merge Conflict Detected",
-    "Message:   Move the code blocks to their appropriate locations to resolve the conflict"
+    "Message:   Smash the interfering code blocks to resolve the conflict"
   ]);
   endRoundThree.setStyle({
     fontSize: "14px",
@@ -500,7 +500,7 @@ function create() {
   //End Round Four Text
   endRoundFour = this.add.text(15, 615, [
     "Message: The FINAL final list of issues inbound from client",
-    "Warning: Don't hold your breath",
+    "Warning: Dodge those new feature requests or you may introduce new bugs to our list!",
   ]);
   endRoundFour.setStyle({
     fontSize: "14px",
