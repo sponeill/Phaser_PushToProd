@@ -237,9 +237,9 @@ function breakCodeBlock(player, codeBlock) {
   var breaker = codeBlockBreaks.create(codeBlock.x, codeBlock.y, "code_block");
   codeBlock.disableBody(true, true)
   breaker.anims.play("brick_break", true);
+  conflictsResolved--;
   setTimeout(function() {
     breaker.disableBody(true, true);
-    conflictsResolved--;
   }, 1500)
   
   conflicts.children.iterate(function (child) {
