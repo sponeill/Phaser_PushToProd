@@ -1,19 +1,20 @@
 function roundOne() {
 
-  consoleText.visible = false;
-  startRoundOne.visible = true;
-  gameNotStarted = false;
-  bugCount = 12;
-  round = 1;
-  roundText.setText("Sprint: " + round);
-  gameTimerText.visible = true;
-  roundText.visible = true;
+  roundFour();
+  // consoleText.visible = false;
+  // startRoundOne.visible = true;
+  // gameNotStarted = false;
+  // bugCount = 12;
+  // round = 1;
+  // roundText.setText("Sprint: " + round);
+  // gameTimerText.visible = true;
+  // roundText.visible = true;
 
-  bugs.children.iterate(function (child) {
-    randomLeftRightBug(child);
-    child.enableBody(true, child.x, 0, true, true);
-    child.setGravityY(0);
-  });
+  // bugs.children.iterate(function (child) {
+  //   randomLeftRightBug(child);
+  //   child.enableBody(true, child.x, 0, true, true);
+  //   child.setGravityY(0);
+  // });
 }
 
 function roundTwo(player, bug) {
@@ -235,11 +236,13 @@ function spawnCodeBlock(location) {
 }
 
 function breakCodeBlock(player, codeBlock) {
-  codeBlock.anims.play("brick_break", true);
+  var breaker = codeBlockBreaks.create(codeBlock.x, codeBlock.y, "code_block");
+  codeBlock.disableBody(true, true)
+  breaker.anims.play("brick_break", true);
   setTimeout(function() {
-    codeBlock.disableBody(true, true);
+    breaker.disableBody(true, true);
     conflictsResolved--;
-  }, 100)
+  }, 1500)
   
   conflicts.children.iterate(function (child) {
     child.angle = child.angle - 10;

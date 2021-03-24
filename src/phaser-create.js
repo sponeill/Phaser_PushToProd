@@ -377,6 +377,9 @@ function create() {
   //Code Blocks
   codeBlocks = this.physics.add.group();
 
+  //Code Block Breaks
+  codeBlockBreaks = this.physics.add.group();
+
   //Features
   features = this.physics.add.group();
 
