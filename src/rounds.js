@@ -233,8 +233,8 @@ function spawnCodeBlock(location) {
 }
 
 function breakCodeBlock(player, codeBlock) {
-  var breaker = codeBlockBreaks.create(codeBlock.x, codeBlock.y, "code_block");
   codeBlock.disableBody(true, true)
+  var breaker = codeBlockBreaks.create(codeBlock.x, codeBlock.y, "code_block");
   breaker.anims.play("brick_break", true);
   conflictsResolved--;
   setTimeout(function() {
