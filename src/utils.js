@@ -10,7 +10,7 @@ function formatTime(seconds) {
 }
   
 function incrementGameTimer() {
-    if (gameTimerText.visible === true) {
+    if (gameTimerText.visible === true && !launched) {
       gameTimer += 1; // One second
       gameTimerText.setText(formatTime(gameTimer));
     }
