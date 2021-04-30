@@ -537,7 +537,7 @@ function create() {
   summonArchitectText.visible = false;
 
   //Summon Architect Text
-  enableFirewallText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press 'F' to enable firewall ..."]);
+  enableFirewallText = this.add.text(15, 615, ["C:\\Develop\\Endless-Client-Project> Press 'D' to enable firewall ..."]);
   enableFirewallText.setStyle({
     fontSize: "14px",
     fontFamily: "Courier",
